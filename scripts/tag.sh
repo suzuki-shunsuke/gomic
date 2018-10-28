@@ -26,14 +26,14 @@ echo "cd `dirname $0`/.."
 cd `dirname $0`/..
 
 echo "create internal/domain/version.go"
-cat << EOS > internal/domain/version.go
+cat << EOS > internal/domain/version.go || exit 1
 package domain
 
 // Version is the gomic's version.
 const Version = "$VERSION"
 EOS
 
-git add internal/domain/version.go
-git commit -m "build: update version to $TAG"
+git add internal/domain/version.go || exit 1
+git commit -m "build: update version to $TAG" || exit 1
 echo "git tag $TAG"
 git tag $TAG
