@@ -1,0 +1,12 @@
+---
+default:
+# interface_prefix: Example
+# interface_suffix: Example
+items:
+- src:
+    file: internal/domain/filesystem.go
+    interface: FileSystem
+    name: FileSystemMock
+  dest:
+    package: test
+    file: internal/test/filesystem_mock.go
