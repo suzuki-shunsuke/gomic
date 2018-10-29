@@ -8,15 +8,15 @@ import (
 )
 
 func ExampleOSMock() {
-	hello := examples.NewOSMock(nil, gomic.DoNothing)
+	mock := examples.NewOSMock(nil, gomic.DoNothing)
 	// return default values
-	s, err := hello.Getwd()
+	s, err := mock.Getwd()
 	fmt.Println(s == "" && err == nil)
 	// implement mock function
-	hello.Impl.Getwd = func() (string, error) {
+	mock.Impl.Getwd = func() (string, error) {
 		return "/tmp", fmt.Errorf("")
 	}
-	s, err = hello.Getwd()
+	s, err = mock.Getwd()
 	fmt.Println(s == "/tmp" && err != nil)
 	// Output:
 	// true
