@@ -8,8 +8,7 @@ import (
 )
 
 func ExampleOSMock() {
-	hello := examples.NewOSMock(nil)
-	hello.CallbackNotImplemented = gomic.DoNothing
+	hello := examples.NewOSMock(nil, gomic.DoNothing)
 	// return default values
 	s, err := hello.Getwd()
 	fmt.Println(s == "" && err == nil)

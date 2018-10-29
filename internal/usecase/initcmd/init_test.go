@@ -13,8 +13,7 @@ import (
 )
 
 func TestMain(t *testing.T) {
-	fsys := test.NewFileSystemMock(nil)
-	fsys.CallbackNotImplemented = gomic.DoNothing
+	fsys := test.NewFileSystemMock(nil, gomic.DoNothing)
 	d := []byte{}
 	fsys.Impl.Write = func(dst string, data []byte) error {
 		d = data

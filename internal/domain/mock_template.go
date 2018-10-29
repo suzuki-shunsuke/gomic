@@ -21,7 +21,7 @@ type (
 	{{.MockName}} struct {
 		t *testing.T
 		name string
-		CallbackNotImplemented func(t *testing.T, intfName, methodName string)
+		CallbackNotImplemented gomic.CallbackNotImplemented
 		Impl {{.MockName}}Impl
 	}
 
@@ -34,8 +34,8 @@ type (
 )
 
 // New{{.MockName}} returns {{.MockName}} .
-func New{{.MockName}}(t *testing.T) *{{.MockName}} {
-	return &{{.MockName}}{t: t}
+func New{{.MockName}}(t *testing.T, cb gomic.CallbackNotImplemented) *{{.MockName}} {
+	return &{{.MockName}}{t: t, CallbackNotImplemented: cb}
 }
 {{$mockName := .MockName -}}
 {{- range .Methods}}

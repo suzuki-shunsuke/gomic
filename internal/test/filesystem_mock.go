@@ -16,7 +16,7 @@ type (
 	FileSystemMock struct {
 		t                      *testing.T
 		name                   string
-		CallbackNotImplemented func(t *testing.T, intfName, methodName string)
+		CallbackNotImplemented gomic.CallbackNotImplemented
 		Impl                   FileSystemMockImpl
 	}
 
@@ -31,8 +31,8 @@ type (
 )
 
 // NewFileSystemMock returns FileSystemMock .
-func NewFileSystemMock(t *testing.T) *FileSystemMock {
-	return &FileSystemMock{t: t}
+func NewFileSystemMock(t *testing.T, cb gomic.CallbackNotImplemented) *FileSystemMock {
+	return &FileSystemMock{t: t, CallbackNotImplemented: cb}
 }
 
 // Exist is a mock method.
