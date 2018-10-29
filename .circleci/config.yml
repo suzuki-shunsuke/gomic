@@ -9,7 +9,6 @@ jobs:
     - checkout
     - run: npm i
     - run: dep-dl
-    - run: cd examples && dep-dl
     - run: bash scripts/commitlint-circleci.sh
     - run: npm run lint
     - run: bash scripts/codecov-test.sh
