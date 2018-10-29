@@ -5,6 +5,11 @@ import (
 	"testing"
 )
 
+type (
+	// CallbackNotImplemented is a type of mock's CallbackNotImplemented field.
+	CallbackNotImplemented func(t *testing.T, intfName, methodName string)
+)
+
 // DefaultCallbackNotImplemented is a default function which is called when the method is not implemented.
 func DefaultCallbackNotImplemented(t *testing.T, intf, method string) {
 	if t == nil {

@@ -11,28 +11,28 @@ import (
 )
 
 func Test_findCfg(t *testing.T) {
-	fsys := test.NewFileSystemMock(t)
+	fsys := test.NewFileSystemMock(t, nil)
 	fsys.Impl.Getwd = func() (string, error) {
 		return "/", nil
 	}
 	fsys.Impl.Exist = func(p string) bool {
 		return false
 	}
-	fsys2 := test.NewFileSystemMock(t)
+	fsys2 := test.NewFileSystemMock(t, nil)
 	fsys2.Impl.Getwd = func() (string, error) {
 		return "/", nil
 	}
 	fsys2.Impl.Exist = func(p string) bool {
 		return true
 	}
-	fsys3 := test.NewFileSystemMock(t)
+	fsys3 := test.NewFileSystemMock(t, nil)
 	fsys3.Impl.Getwd = func() (string, error) {
 		return "/foo/bar", nil
 	}
 	fsys3.Impl.Exist = func(p string) bool {
 		return p == "/foo/.gomic.yml"
 	}
-	fsys4 := test.NewFileSystemMock(t)
+	fsys4 := test.NewFileSystemMock(t, nil)
 	fsys4.Impl.Getwd = func() (string, error) {
 		return "/foo/bar", nil
 	}
