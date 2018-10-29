@@ -13,3 +13,6 @@ func DefaultCallbackNotImplemented(t *testing.T, intf, method string) {
 	}
 	t.Fatalf("%s#%s is not implemented", intf, method)
 }
+
+// DoNothing does nothing.
+func DoNothing(t *testing.T, intf, method string) {}

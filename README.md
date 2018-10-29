@@ -40,11 +40,10 @@ $ go get -u github.com/suzuki-shunsuke/gomic/cmd/gomic
 1. Write an interface.
 
 ```go
-// example/hello.go
 type (
-	Hello interface {
-		ExistFile(string) bool
-		MkdirAll(string)
+	OS interface {
+		Getwd() (string, error)
+		Mkdir(name string, perm os.FileMode) error
 	}
 )
 ```
@@ -55,19 +54,27 @@ type (
 $ gomic init
 ```
 
+3. Edit the configuration file
+
 ```yaml
 ---
 items:
 - src:
-    package: github.com/suzuki-shunsuke/gomic/example
-    interface: Hello
-    name: HelloMock
+    file: os.go
+    interface: OS
+    name: OSMock
   dest:
-    package: example
-    file: example/example_mock.go
+    package: examples
+    file: os_mock.go
+- src:
+    package: io
+    interface: ReadCloser
+    name: ReadCloserMock
+  dest:
+    package: examples
+    file: readcloser_mock.go
 ```
 
-3. Edit the configuration file
 4. Generate mocks.
 
 ```

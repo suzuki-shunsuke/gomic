@@ -1,78 +1,16 @@
 ---
 items:
 - src:
-    file: example2.go
-    interface: Hello2
-    name: HelloMock2
+    file: os.go
+    interface: OS
+    name: OSMock
   dest:
     package: examples
-    file: example_mock2.go
-- src:
-    dir: .
-    interface: Hello3
-    name: HelloMock3
-  dest:
-    package: examples
-    file: example_mock3.go
-- src:
-    file: example.go
-    interface: Hello
-    name: HelloMock4
-  dest:
-    package: examples
-    file: example_mock4.go
-- src:
-    dir: .
-    interface: Hello
-    name: HelloMock5
-  dest:
-    file: example_mock5.go
+    file: os_mock.go
 - src:
     package: io
     interface: ReadCloser
     name: ReadCloserMock
   dest:
     package: examples
-    file: example_mock6.go
-- src:
-    file: example7.go
-    interface: Hello7
-    name: HelloMock7
-  dest:
-    package: examples
-    file: example_mock7.go
-- src:
-    package: github.com/suzuki-shunsuke/gomic/examples/examples
-    interface: Hello8
-    name: HelloMock8
-  dest:
-    package: examples
-    file: example_mock8.go
-- src:
-    file: example9.go
-    interface: Hello9
-    name: HelloMock9
-  dest:
-    package: examples
-    file: example_mock9.go
-- src:
-    package: github.com/labstack/echo
-    interface: Context
-    name: HelloMock10
-  dest:
-    package: examples
-    file: example_mock10.go
-- src:
-    file: example11.go
-    interface: Hello11
-    name: HelloMock11
-  dest:
-    package: examples
-    file: example_mock11.go
-- src:
-    package: github.com/suzuki-shunsuke/rterror
-    interface: RuntimeError
-    name: HelloMock12
-  dest:
-    package: examples
-    file: example_mock12.go
+    file: readcloser_mock.go
