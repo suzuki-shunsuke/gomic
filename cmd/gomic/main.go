@@ -5,5 +5,5 @@ import (
 )
 
 func main() {
-	handler.Gomock()
+	handler.Gomic()
 }
