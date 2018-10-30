@@ -14,23 +14,21 @@ func getParams(
 	if prms == nil || len(prms.List) == 0 {
 		return []domain.Var{}, imports, false, nil
 	}
-	size := len(prms.List)
-	params := make([]domain.Var, size)
+	params := make([]domain.Var, prms.NumFields())
 	var err error
-	for i, p := range prms.List {
+	i := 0
+	for _, p := range prms.List {
 		if p.Type, imports, err = getImportsInExpr(p.Type, fileImports, imports, srcPkg, isSamePkg); err != nil {
 			return nil, nil, false, err
 		}
-		name := getNameFromField(p)
-		if name == "" {
-			name = fmt.Sprintf("p%d", i)
-		}
-		param := Var{name: name}
-		params[i] = param
-		if len(p.Names) == 0 {
-			p.Names = []*ast.Ident{ast.NewIdent(fmt.Sprintf("p%d", i))}
+		for _, ident := range p.Names {
+			if ident.Name == "" {
+				ident.Name = fmt.Sprintf("p%d", i)
+			}
+			params[i] = Var{name: ident.Name}
+			i++
 		}
 	}
-	_, isEllipsis := prms.List[size-1].Type.(*ast.Ellipsis)
+	_, isEllipsis := prms.List[len(prms.List)-1].Type.(*ast.Ellipsis)
 	return params, imports, isEllipsis, nil
 }

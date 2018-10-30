@@ -14,10 +14,11 @@ func getResults(
 	if results == nil || len(results.List) == 0 {
 		return []domain.Var{}, imports, false, nil
 	}
-	vars := make([]domain.Var, len(results.List))
+	vars := make([]domain.Var, results.NumFields())
 	hasResultNames := false
 	var err error
-	for i, p := range results.List {
+	i := 0
+	for _, p := range results.List {
 		p.Type, imports, err = getImportsInExpr(p.Type, fileImports, imports, srcPkg, isSamePkg)
 		if err != nil {
 			return nil, nil, false, err
@@ -26,14 +27,16 @@ func getResults(
 		if err != nil {
 			return nil, nil, false, err
 		}
-		name := getNameFromField(p)
-		if name == "" {
-			name = fmt.Sprintf("r%d", i)
-		} else {
-			hasResultNames = true
+		for _, ident := range p.Names {
+			name := ident.Name
+			if name == "" {
+				name = fmt.Sprintf("r%d", i)
+			} else {
+				hasResultNames = true
+			}
+			vars[i] = Var{name: name, t: t}
+			i++
 		}
-		result := Var{name: name, t: t}
-		vars[i] = result
 	}
 	return vars, imports, hasResultNames, nil
 }
