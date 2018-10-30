@@ -11,7 +11,7 @@ func getResults(
 	results *ast.FieldList, srcPkg domain.ImportSpec, isSamePkg bool,
 	fileImports map[string]domain.ImportSpec, imports domain.ImportSpecs,
 ) ([]domain.Var, domain.ImportSpecs, bool, error) {
-	if results == nil || len(results.List) == 0 {
+	if results == nil || results.NumFields() == 0 {
 		return []domain.Var{}, imports, false, nil
 	}
 	vars := make([]domain.Var, results.NumFields())
@@ -26,6 +26,11 @@ func getResults(
 		t, err := toString(p.Type)
 		if err != nil {
 			return nil, nil, false, err
+		}
+		if len(p.Names) == 0 {
+			vars[i] = Var{name: fmt.Sprintf("r%d", i), t: t}
+			i++
+			continue
 		}
 		for _, ident := range p.Names {
 			name := ident.Name
