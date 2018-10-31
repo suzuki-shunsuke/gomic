@@ -22,7 +22,9 @@ func getParams(
 			return nil, nil, false, err
 		}
 		if len(p.Names) == 0 {
-			params[i] = Var{name: fmt.Sprintf("p%d", i)}
+			name := fmt.Sprintf("p%d", i)
+			params[i] = Var{name: name}
+			p.Names = []*ast.Ident{ast.NewIdent(name)}
 			i++
 			continue
 		}
