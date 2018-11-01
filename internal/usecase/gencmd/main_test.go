@@ -66,7 +66,7 @@ func Test_findCfg(t *testing.T) {
 	}
 }
 
-func Test_Main(t *testing.T) {
+func TestMain(t *testing.T) {
 	fsys := test.NewFileSystemMock(t, gomic.DoNothing)
 	fsys.Impl.GetWriteCloser = func(p string) (io.WriteCloser, error) {
 		wc := test.NewWriteCloserMock(t, gomic.DoNothing)
@@ -112,4 +112,30 @@ func Test_Main(t *testing.T) {
 		}, nil
 	}
 	assert.Nil(t, Main(fsys, importer, cfgReader, "/tmp/.gomic.yml"))
+}
+
+func Test_initCfg(t *testing.T) {
+	cfg := domain.Config{
+		Default: domain.DefaultConfiguration{
+			SrcDefaultConfiguration: domain.SrcDefaultConfiguration{
+				InterfacePrefix: "Prefix",
+				InterfaceSuffix: "Suffix",
+			},
+		},
+		Items: []domain.Item{
+			{
+				Src: domain.Src{
+					Package:   "os",
+					Interface: "FileInfo",
+				},
+				Dest: domain.Dest{
+					Package: "examples",
+					File:    "/tmp/fileinfo_mock.go",
+				},
+			},
+		},
+	}
+	c, err := initCfg(cfg, "/tmp/.gomic.yml")
+	assert.Nil(t, err)
+	assert.Equal(t, "PrefixFileInfoSuffix", c.Items[0].Src.Name)
 }
