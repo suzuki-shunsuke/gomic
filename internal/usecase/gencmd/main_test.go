@@ -2,11 +2,14 @@ package gencmd
 
 import (
 	"fmt"
+	"io"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/suzuki-shunsuke/gomic/gomic"
 	"github.com/suzuki-shunsuke/gomic/internal/domain"
+	"github.com/suzuki-shunsuke/gomic/internal/infra"
 	"github.com/suzuki-shunsuke/gomic/internal/test"
 )
 
@@ -61,4 +64,52 @@ func Test_findCfg(t *testing.T) {
 			}
 		})
 	}
+}
+
+func Test_Main(t *testing.T) {
+	fsys := test.NewFileSystemMock(t, gomic.DoNothing)
+	fsys.Impl.GetWriteCloser = func(p string) (io.WriteCloser, error) {
+		wc := test.NewWriteCloserMock(t, gomic.DoNothing)
+		return wc, nil
+	}
+	cfgReader := test.NewCfgReaderMock(t, gomic.DoNothing)
+	cfgReader.Impl.Read = func(p string) (domain.Config, error) {
+		return domain.Config{
+			Items: []domain.Item{
+				{
+					Src: domain.Src{
+						Package:   "os",
+						Interface: "FileInfo",
+						Name:      "FileInfoMock",
+					},
+					Dest: domain.Dest{
+						Package: "examples",
+						File:    "/tmp/fileinfo_mock.go",
+					},
+				},
+			},
+		}, nil
+	}
+	importer := infra.Importer{}
+	assert.Nil(t, Main(fsys, importer, cfgReader, "/tmp/.gomic.yml"))
+	bPkg, err := importer.GetBuildPkgByPkgPath("os", "", 0)
+	assert.Nil(t, err)
+	cfgReader.Impl.Read = func(p string) (domain.Config, error) {
+		return domain.Config{
+			Items: []domain.Item{
+				{
+					Src: domain.Src{
+						Dir:       bPkg.Dir,
+						Interface: "FileInfo",
+						Name:      "FileInfoMock",
+					},
+					Dest: domain.Dest{
+						Package: "examples",
+						File:    "/tmp/fileinfo_mock.go",
+					},
+				},
+			},
+		}, nil
+	}
+	assert.Nil(t, Main(fsys, importer, cfgReader, "/tmp/.gomic.yml"))
 }
