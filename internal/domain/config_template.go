@@ -3,13 +3,15 @@ package domain
 // ConfigTpl is a configuration file template.
 const ConfigTpl = `
 ---
+default:
+  # interface_prefix: Mock
+  interface_suffix: Mock
 items:
 - src:
-    package: github.com/suzuki-shunsuke/gomic/examples
-    # file: examples/example.go
-    interface: Hello
-    name: HelloMock
+    package: os
+    interface: FileInfo
+    # name: FileInfoMock
   dest:
-    package: example
-    file: example/example_mock.go
+    package: test
+    file: test/fileinfo_mock.go
 `

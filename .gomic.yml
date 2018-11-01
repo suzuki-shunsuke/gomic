@@ -1,26 +1,22 @@
 ---
 default:
-# interface_prefix: Example
-# interface_suffix: Example
+  interface_suffix: Mock
 items:
 - src:
     file: internal/domain/filesystem.go
     interface: FileSystem
-    name: FileSystemMock
   dest:
     package: test
     file: internal/test/filesystem_mock.go
 - src:
     dir: internal/domain
     interface: CfgReader
-    name: CfgReaderMock
   dest:
     package: test
     file: internal/test/cfg_reader_mock.go
 - src:
     package: io
     interface: WriteCloser
-    name: WriteCloserMock
   dest:
     package: test
     file: internal/test/write_closer_mock.go

@@ -58,18 +58,18 @@ $ gomic init
 
 ```yaml
 ---
+default:
+  interface_suffix: Mock
 items:
 - src:
     file: os.go
     interface: OS
-    name: OSMock
   dest:
     package: examples
     file: os_mock.go
 - src:
     package: io
     interface: ReadCloser
-    name: ReadCloserMock
   dest:
     package: examples
     file: readcloser_mock.go
@@ -88,11 +88,11 @@ $ gomic gen
 ```yaml
 ---
 # file path must be absolute or relative to the configuration file path.
+# default is the default settings of each items. item's settings are preferred than default settings.
 default:
-# vendor_dir is path of the parent directory of `vendor`.
-# vendor_dir should be absolute path or relative to configuration file's parent directory.
-# By default vendor_dir is configuration file's parent directory.
-#  vendor_dir: ""
+#   vendor_dir: ""
+#   interface_prefix: Mock
+#   interface_suffix: Mock
 items:
 - src:
     # package or file or dir are required
@@ -105,6 +105,13 @@ items:
     interface: Hello
     # generated mock name
     name: HelloMock
+    # If name is not given, name is "{{interface_prefix}}{{interface}}{{interface_suffix}}".
+    # If name is given, interface_prefix and interface_suffix are ignored.
+    # interface_prefix: Mock
+    # interface_suffix: Mock
+    # vendor_dir is path of the parent directory of `vendor`.
+    # vendor_dir should be absolute path or relative to configuration file's parent directory.
+    # By default vendor_dir is configuration file's parent directory.
     #  vendor_dir: ""
   dest:
     # generated file's package name
