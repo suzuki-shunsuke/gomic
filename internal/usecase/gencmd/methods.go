@@ -50,7 +50,7 @@ func getMethodsInField(
 	}
 	if ident, ok := field.Type.(*ast.Ident); ok {
 		return getMethodsInIdent(
-			ident, pkg, file, importer, item, fileImports, imports,
+			ident.Name, pkg, file, importer, item, fileImports, imports,
 			srcPkg, isSamePkg)
 	}
 	if se, ok := field.Type.(*ast.SelectorExpr); ok {
@@ -96,28 +96,25 @@ func getMethodsInSelectorExpr(
 }
 
 func getMethodsInIdent(
-	ident *ast.Ident, pkg *ast.Package, file *ast.File,
+	identName string, pkg *ast.Package, file *ast.File,
 	importer domain.Importer, item domain.Item,
 	fileImports map[string]domain.ImportSpec, imports domain.ImportSpecs,
 	srcPkg domain.ImportSpec, isSamePkg bool,
 ) ([]domain.Method, domain.ImportSpecs, error) {
+	var (
+		intf *ast.InterfaceType
+		err  error
+	)
 	if pkg == nil {
-		intf, err := getInterfaceInFile(file, ident.Name)
-		if err != nil {
-			return nil, nil, err
-		}
-		if intf == nil {
-			return nil, nil, fmt.Errorf("%s is not found", ident.Name)
-		}
-		return getMethodsFromInterface(
-			intf, pkg, file, imports, item, importer, srcPkg, isSamePkg)
+		intf, err = getInterfaceInFile(file, identName)
+	} else {
+		file, intf, err = getFileAndIntfFromPkg(pkg, identName)
 	}
-	file, intf, err := getFileAndIntfFromPkg(pkg, ident.Name)
 	if err != nil {
 		return nil, nil, err
 	}
 	if intf == nil {
-		return nil, nil, fmt.Errorf("%s is not found", ident.Name)
+		return nil, nil, fmt.Errorf("%s is not found", identName)
 	}
 	return getMethodsFromInterface(
 		intf, pkg, file, imports, item, importer, srcPkg, isSamePkg)
