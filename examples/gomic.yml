@@ -1,16 +1,16 @@
 ---
+default:
+  interface_suffix: Mock
 items:
 - src:
     file: os.go
     interface: OS
-    name: OSMock
   dest:
     package: examples
     file: os_mock.go
 - src:
     package: io
     interface: ReadCloser
-    name: ReadCloserMock
   dest:
     package: examples
     file: readcloser_mock.go

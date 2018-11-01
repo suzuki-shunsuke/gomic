@@ -66,6 +66,11 @@ func initCfg(cfg domain.Config, cfgPath string) (domain.Config, error) {
 		if !filepath.IsAbs(item.Dest.File) {
 			item.Dest.File = filepath.Join(cfgDir, item.Dest.File)
 		}
+		if item.Src.Name == "" {
+			item.Src.Name = fmt.Sprintf(
+				"%s%s%s", item.Src.InterfacePrefix,
+				item.Src.Interface, item.Src.InterfaceSuffix)
+		}
 
 		if item.Src.File != "" && !filepath.IsAbs(item.Src.File) {
 			item.Src.File = filepath.Join(cfgDir, item.Src.File)

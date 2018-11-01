@@ -9,7 +9,7 @@ type (
 
 	// DefaultConfiguration represents default configuration.
 	DefaultConfiguration struct {
-		SrcDefaultConfiguration
+		SrcDefaultConfiguration `yaml:",inline"`
 	}
 
 	// SrcDefaultConfiguration represents source's default configuration.
@@ -21,19 +21,19 @@ type (
 
 	// Item represents configuration of each mock.
 	Item struct {
-		Src  Src
-		Dest Dest
-		DefaultConfiguration
+		Src                  Src
+		Dest                 Dest
+		DefaultConfiguration `yaml:",inline"`
 	}
 
 	// Src represents source configuration.
 	Src struct {
-		Package   string
-		Interface string
-		Name      string
-		File      string
-		Dir       string
-		SrcDefaultConfiguration
+		Package                 string
+		Interface               string
+		Name                    string
+		File                    string
+		Dir                     string
+		SrcDefaultConfiguration `yaml:",inline"`
 	}
 
 	// Dest represents generated file's configuration.
