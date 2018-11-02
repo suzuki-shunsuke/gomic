@@ -145,6 +145,10 @@ See [examples](https://github.com/suzuki-shunsuke/gomic/tree/master/examples) .
 
 Please see [Releases](https://github.com/suzuki-shunsuke/gomic/releases).
 
+## Contributing
+
+Please see [CONTRIBUTING.md](CONTRIBUTING.md) .
+
 ## License
 
 [MIT](LICENSE)
