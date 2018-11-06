@@ -55,12 +55,19 @@ func (mock {{$mockName}}) {{.Definition}} {
 	} else {
 		gomic.DefaultCallbackNotImplemented(mock.t, mock.name, methodName)
 	}
-	{{if .Results}}return {{end}}mock.Fake{{.Name}}({{.ParamsStr}})
+	{{if .Results}}return mock.fakeZero{{.Name}}({{.ParamsStr}}){{end}}
 }
 
-// Fake{{.Name}} is a fake method.
-func (mock {{$mockName}}) Fake{{.Definition}} {
-{{- if .Results}}
+{{if .Results}}
+// SetFake{{.Name}} sets a fake method.
+func (mock *{{$mockName}}) SetFake{{.Name}}{{.SetFakeDefinition}} {
+	mock.Impl.{{.Name}} = func{{.SetFakeInternalDefinition}} {
+		return {{.ResultValuesStr}}
+	}
+}
+
+// fakeZero{{.Name}} is a fake method which returns zero values.
+func (mock {{$mockName}}) fakeZero{{.Definition}} {
   {{- if not .HasResultNames}}
 	var (
 {{- range .Results}}
@@ -69,7 +76,7 @@ func (mock {{$mockName}}) Fake{{.Definition}} {
 	)
 	{{- end}}
 	return {{.ResultValuesStr}}
-{{- end}}
 }
+{{end}}
 {{end}}
 `

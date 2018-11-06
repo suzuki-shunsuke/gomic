@@ -22,8 +22,7 @@ cli tool to generate golang's mock for test.
 ## Features
 
 * Manage mocks with a configuration file, so it is easy to update mocks when interfaces are updated
-* Generated mock is simple and generic. `EXPECT` and `RETURN` style isn't supported. You can set mock function freely.
-* Provide simple fake implementation which only returns default values
+* Simple and flexible API. Complicated DSL is not provided
 
 ## Install
 
@@ -83,6 +82,10 @@ $ gomic gen
 
 **Note that `gen` command overwrites the existing file without confirmation.**
 
+## Examples
+
+See [examples](https://github.com/suzuki-shunsuke/gomic/tree/master/examples) .
+
 ## Configuration
 
 ```yaml
@@ -130,10 +133,6 @@ items:
 * Before run the `gen` command, packages which the interface depends on should be installed at GOPATH or vendor directory. gomic supports vendor directory.
 * Currently it is not supported to output multiple mocks in the same file
 * Generated code is not formatted. So we recommend to format them by `gofmt`.
-
-## Examples
-
-See [examples](https://github.com/suzuki-shunsuke/gomic/tree/master/examples) .
 
 ## Other Mocking Libraries
 

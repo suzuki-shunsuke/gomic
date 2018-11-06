@@ -36,5 +36,24 @@ func getMethodFromFuncType(
 	}
 	method.decl = fmt.Sprintf("%s %s", method.name, s)
 	method.definition = fmt.Sprintf("%s%s", method.name, s[4:])
+	if len(results) != 0 {
+		method.setFakeInternalDefinition = s[4:]
+		arr := make([]*ast.Field, len(funcType.Results.List))
+		for i, result := range funcType.Results.List {
+			names := result.Names
+			if len(result.Names) == 0 {
+				names = []*ast.Ident{ast.NewIdent(fmt.Sprintf("r%d", i))}
+			}
+			arr[i] = &ast.Field{
+				Names: names,
+				Type:  result.Type,
+			}
+		}
+		setFakeStr, err := toString(&ast.FuncType{Params: &ast.FieldList{List: arr}})
+		if err != nil {
+			return method, nil, err
+		}
+		method.setFakeDefinition = setFakeStr[4:]
+	}
 	return method, imports, nil
 }
