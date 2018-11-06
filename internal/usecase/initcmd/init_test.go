@@ -23,14 +23,10 @@ func TestMain(t *testing.T) {
 	exp := []byte(strings.Trim(domain.ConfigTpl, "\n"))
 	assert.Equal(t, exp, d)
 	d = []byte{}
-	fsys.Impl.Exist = func(dst string) bool {
-		return true
-	}
+	fsys.SetFakeExist(true)
 	assert.Nil(t, Main(fsys, "/tmp/.gomic.yml"))
 	assert.Equal(t, []byte{}, d)
 	fsys.Impl.Exist = nil
-	fsys.Impl.MkdirAll = func(dir string) error {
-		return fmt.Errorf("failed to create a directory")
-	}
+	fsys.SetFakeMkdirAll(fmt.Errorf("failed to create a directory"))
 	assert.NotNil(t, Main(fsys, "/tmp/.gomic.yml"))
 }
