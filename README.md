@@ -13,16 +13,16 @@ cli tool to generate golang's mock for test.
 * [Features](#features)
 * [Install](#install)
 * [Getting Started](#getting-started)
+* [Examples](https://github.com/suzuki-shunsuke/gomic/tree/master/examples)
 * [Configuration](#configuration)
 * [Note](#note)
-* [Examples](https://github.com/suzuki-shunsuke/gomic/tree/master/examples)
 * [Other Mocking Libraries](#other-mocking-libraries)
 * [Change Log](https://github.com/suzuki-shunsuke/gomic/releases)
 
 ## Features
 
 * Manage mocks with a configuration file, so it is easy to update mocks when interfaces are updated
-* Simple and flexible API. Complicated DSL is not provided
+* Simple and flexible API. Complicated API and DSL aren't provided. So learning cost is low and test code is easy to read
 
 ## Install
 
