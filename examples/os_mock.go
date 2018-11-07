@@ -91,7 +91,7 @@ func (mock *OSMock) SetMkdir(impl func(name string, perm os.FileMode) error) *OS
 
 // SetFakeMkdir sets a fake method.
 func (mock *OSMock) SetFakeMkdir(r0 error) *OSMock {
-	mock.impl.Mkdir = func(name string, perm os.FileMode) error {
+	mock.impl.Mkdir = func(string, os.FileMode) error {
 		return r0
 	}
 	return mock

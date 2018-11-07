@@ -53,7 +53,7 @@ func (mock *ReadCloserMock) SetRead(impl func(p []byte) (n int, err error)) *Rea
 
 // SetFakeRead sets a fake method.
 func (mock *ReadCloserMock) SetFakeRead(n int, err error) *ReadCloserMock {
-	mock.impl.Read = func(p []byte) (n int, err error) {
+	mock.impl.Read = func([]byte) (int, error) {
 		return n, err
 	}
 	return mock
