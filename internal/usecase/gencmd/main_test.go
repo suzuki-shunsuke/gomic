@@ -2,7 +2,6 @@ package gencmd
 
 import (
 	"fmt"
-	"io"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -14,22 +13,20 @@ import (
 )
 
 func Test_findCfg(t *testing.T) {
-	fsys := test.NewFileSystemMock(t, nil)
-	fsys.SetFakeGetwd("/", nil)
-	fsys.SetFakeExist(false)
-	fsys2 := test.NewFileSystemMock(t, nil)
-	fsys2.SetFakeGetwd("/", nil)
-	fsys2.SetFakeExist(true)
-	fsys3 := test.NewFileSystemMock(t, nil)
-	fsys3.SetFakeGetwd("/foo/bar", nil)
-	fsys3.Impl.Exist = func(p string) bool {
-		return p == "/foo/.gomic.yml"
-	}
-	fsys4 := test.NewFileSystemMock(t, nil)
-	fsys4.SetFakeGetwd("/foo/bar", nil)
-	fsys4.Impl.Exist = func(p string) bool {
-		return p == "/foo/zoo/.gomic.yml"
-	}
+	fsys := test.NewFileSystemMock(t, nil).
+		SetFakeGetwd("/", nil).SetFakeExist(false)
+	fsys2 := test.NewFileSystemMock(t, nil).
+		SetFakeGetwd("/", nil).SetFakeExist(true)
+	fsys3 := test.NewFileSystemMock(t, nil).
+		SetFakeGetwd("/foo/bar", nil).
+		SetExist(func(p string) bool {
+			return p == "/foo/.gomic.yml"
+		})
+	fsys4 := test.NewFileSystemMock(t, nil).
+		SetFakeGetwd("/foo/bar", nil).
+		SetExist(func(p string) bool {
+			return p == "/foo/zoo/.gomic.yml"
+		})
 	data := []struct {
 		testcase string
 		fsys     domain.FileSystem
@@ -55,26 +52,24 @@ func Test_findCfg(t *testing.T) {
 }
 
 func TestMain(t *testing.T) {
-	fsys := test.NewFileSystemMock(t, gomic.DoNothing)
-	fsys.Impl.GetWriteCloser = func(p string) (io.WriteCloser, error) {
-		return test.NewWriteCloserMock(t, gomic.DoNothing), nil
-	}
-	cfgReader := test.NewCfgReaderMock(t, gomic.DoNothing)
-	cfgReader.SetFakeRead(domain.Config{
-		Items: []domain.Item{
-			{
-				Src: domain.Src{
-					Package:   "os",
-					Interface: "FileInfo",
-					Name:      "FileInfoMock",
-				},
-				Dest: domain.Dest{
-					Package: "examples",
-					File:    "/tmp/fileinfo_mock.go",
+	fsys := test.NewFileSystemMock(t, gomic.DoNothing).
+		SetFakeGetWriteCloser(test.NewWriteCloserMock(t, gomic.DoNothing), nil)
+	cfgReader := test.NewCfgReaderMock(t, gomic.DoNothing).
+		SetFakeRead(domain.Config{
+			Items: []domain.Item{
+				{
+					Src: domain.Src{
+						Package:   "os",
+						Interface: "FileInfo",
+						Name:      "FileInfoMock",
+					},
+					Dest: domain.Dest{
+						Package: "examples",
+						File:    "/tmp/fileinfo_mock.go",
+					},
 				},
 			},
-		},
-	}, nil)
+		}, nil)
 	importer := infra.Importer{}
 	assert.Nil(t, Main(fsys, importer, cfgReader, "/tmp/.gomic.yml"))
 	bPkg, err := importer.GetBuildPkgByPkgPath("os", "", 0)

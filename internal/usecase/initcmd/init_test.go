@@ -13,12 +13,12 @@ import (
 )
 
 func TestMain(t *testing.T) {
-	fsys := test.NewFileSystemMock(nil, gomic.DoNothing)
 	d := []byte{}
-	fsys.Impl.Write = func(dst string, data []byte) error {
-		d = data
-		return nil
-	}
+	fsys := test.NewFileSystemMock(nil, gomic.DoNothing).
+		SetWrite(func(dst string, data []byte) error {
+			d = data
+			return nil
+		})
 	assert.Nil(t, Main(fsys, "/tmp/.gomic.yml"))
 	exp := []byte(strings.Trim(domain.ConfigTpl, "\n"))
 	assert.Equal(t, exp, d)
@@ -26,7 +26,6 @@ func TestMain(t *testing.T) {
 	fsys.SetFakeExist(true)
 	assert.Nil(t, Main(fsys, "/tmp/.gomic.yml"))
 	assert.Equal(t, []byte{}, d)
-	fsys.Impl.Exist = nil
-	fsys.SetFakeMkdirAll(fmt.Errorf("failed to create a directory"))
+	fsys.SetExist(nil).SetFakeMkdirAll(fmt.Errorf("failed to create a directory"))
 	assert.NotNil(t, Main(fsys, "/tmp/.gomic.yml"))
 }
