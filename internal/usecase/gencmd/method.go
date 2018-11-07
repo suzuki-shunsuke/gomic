@@ -35,7 +35,7 @@ func getMethodFromFuncType(
 		return method, nil, err
 	}
 	method.decl = fmt.Sprintf("%s %s", method.name, s)
-	method.definition = fmt.Sprintf("%s%s", method.name, s[4:])
+	method.definition = s[4:]
 	if len(results) != 0 {
 		method.setFakeInternalDefinition = s[4:]
 		arr := make([]*ast.Field, len(funcType.Results.List))

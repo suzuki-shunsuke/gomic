@@ -17,9 +17,9 @@ func ExampleOSMock() {
 	s, err = mock.Getwd()
 	fmt.Println(s == "foo" && err == nil)
 	// implement mock method
-	mock.Impl.Getwd = func() (string, error) {
+	mock.SetGetwd(func() (string, error) {
 		return "/tmp", fmt.Errorf("")
-	}
+	})
 	s, err = mock.Getwd()
 	fmt.Println(s == "/tmp" && err != nil)
 	// Output:

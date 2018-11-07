@@ -22,7 +22,7 @@ type (
 		t *testing.T
 		name string
 		CallbackNotImplemented gomic.CallbackNotImplemented
-		Impl {{.MockName}}Impl
+		impl {{.MockName}}Impl
 	}
 
 	// {{.MockName}}Impl holds functions which implement interface's methods.
@@ -40,13 +40,13 @@ func New{{.MockName}}(t *testing.T, cb gomic.CallbackNotImplemented) *{{.MockNam
 {{$mockName := .MockName -}}
 {{- range .Methods}}
 // {{.Name}} is a mock method.
-func (mock {{$mockName}}) {{.Definition}} {
+func (mock {{$mockName}}) {{.Name}}{{.Definition}} {
 	methodName := "{{.Name}}"  // nolint: goconst
-	if mock.Impl.{{.Name}} != nil {
+	if mock.impl.{{.Name}} != nil {
 {{- if .Results}}
-		return mock.Impl.{{.Name}}({{.ParamsStr}})
+		return mock.impl.{{.Name}}({{.ParamsStr}})
 {{- else}}
-		mock.Impl.{{.Name}}({{.ParamsStr}})
+		mock.impl.{{.Name}}({{.ParamsStr}})
 		return
 {{- end}}
 	}
@@ -58,16 +58,23 @@ func (mock {{$mockName}}) {{.Definition}} {
 	{{if .Results}}return mock.fakeZero{{.Name}}({{.ParamsStr}}){{end}}
 }
 
+// Set{{.Name}} sets a method and returns the mock.
+func (mock *{{$mockName}}) Set{{.Name}}(impl func{{.Definition}}) *{{$mockName}} {
+	mock.impl.{{.Name}} = impl
+	return mock
+}
+
 {{if .Results}}
 // SetFake{{.Name}} sets a fake method.
-func (mock *{{$mockName}}) SetFake{{.Name}}{{.SetFakeDefinition}} {
-	mock.Impl.{{.Name}} = func{{.SetFakeInternalDefinition}} {
+func (mock *{{$mockName}}) SetFake{{.Name}}{{.SetFakeDefinition}} *{{$mockName}} {
+	mock.impl.{{.Name}} = func{{.SetFakeInternalDefinition}} {
 		return {{.ResultValuesStr}}
 	}
+	return mock
 }
 
 // fakeZero{{.Name}} is a fake method which returns zero values.
-func (mock {{$mockName}}) fakeZero{{.Definition}} {
+func (mock {{$mockName}}) fakeZero{{.Name}}{{.Definition}} {
   {{- if not .HasResultNames}}
 	var (
 {{- range .Results}}
