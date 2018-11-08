@@ -15,20 +15,17 @@ type (
 	ReadCloserMock struct {
 		t                      *testing.T
 		name                   string
-		CallbackNotImplemented gomic.CallbackNotImplemented
-		impl                   ReadCloserMockImpl
-	}
-
-	// ReadCloserMockImpl holds functions which implement interface's methods.
-	ReadCloserMockImpl struct {
-		Read  func(p []byte) (n int, err error)
-		Close func() error
+		callbackNotImplemented gomic.CallbackNotImplemented
+		impl                   struct {
+			Read  func(p []byte) (n int, err error)
+			Close func() error
+		}
 	}
 )
 
 // NewReadCloserMock returns ReadCloserMock .
 func NewReadCloserMock(t *testing.T, cb gomic.CallbackNotImplemented) *ReadCloserMock {
-	return &ReadCloserMock{t: t, CallbackNotImplemented: cb}
+	return &ReadCloserMock{t: t, callbackNotImplemented: cb}
 }
 
 // Read is a mock method.
@@ -37,22 +34,22 @@ func (mock ReadCloserMock) Read(p []byte) (n int, err error) {
 	if mock.impl.Read != nil {
 		return mock.impl.Read(p)
 	}
-	if mock.CallbackNotImplemented != nil {
-		mock.CallbackNotImplemented(mock.t, mock.name, methodName)
+	if mock.callbackNotImplemented != nil {
+		mock.callbackNotImplemented(mock.t, mock.name, methodName)
 	} else {
 		gomic.DefaultCallbackNotImplemented(mock.t, mock.name, methodName)
 	}
 	return mock.fakeZeroRead(p)
 }
 
-// SetRead sets a method and returns the mock.
-func (mock *ReadCloserMock) SetRead(impl func(p []byte) (n int, err error)) *ReadCloserMock {
+// SetFuncRead sets a method and returns the mock.
+func (mock *ReadCloserMock) SetFuncRead(impl func(p []byte) (n int, err error)) *ReadCloserMock {
 	mock.impl.Read = impl
 	return mock
 }
 
-// SetFakeRead sets a fake method.
-func (mock *ReadCloserMock) SetFakeRead(n int, err error) *ReadCloserMock {
+// SetReturnRead sets a fake method.
+func (mock *ReadCloserMock) SetReturnRead(n int, err error) *ReadCloserMock {
 	mock.impl.Read = func([]byte) (int, error) {
 		return n, err
 	}
@@ -70,22 +67,22 @@ func (mock ReadCloserMock) Close() error {
 	if mock.impl.Close != nil {
 		return mock.impl.Close()
 	}
-	if mock.CallbackNotImplemented != nil {
-		mock.CallbackNotImplemented(mock.t, mock.name, methodName)
+	if mock.callbackNotImplemented != nil {
+		mock.callbackNotImplemented(mock.t, mock.name, methodName)
 	} else {
 		gomic.DefaultCallbackNotImplemented(mock.t, mock.name, methodName)
 	}
 	return mock.fakeZeroClose()
 }
 
-// SetClose sets a method and returns the mock.
-func (mock *ReadCloserMock) SetClose(impl func() error) *ReadCloserMock {
+// SetFuncClose sets a method and returns the mock.
+func (mock *ReadCloserMock) SetFuncClose(impl func() error) *ReadCloserMock {
 	mock.impl.Close = impl
 	return mock
 }
 
-// SetFakeClose sets a fake method.
-func (mock *ReadCloserMock) SetFakeClose(r0 error) *ReadCloserMock {
+// SetReturnClose sets a fake method.
+func (mock *ReadCloserMock) SetReturnClose(r0 error) *ReadCloserMock {
 	mock.impl.Close = func() error {
 		return r0
 	}

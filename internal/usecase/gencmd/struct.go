@@ -19,19 +19,19 @@ type (
 
 	// Method implements domain.Method .
 	Method struct {
-		params                    []domain.Var
-		results                   []domain.Var
-		Field                     *ast.Field
-		FuncType                  *ast.FuncType
-		Decl                      string
-		definition                string
-		setFakeDefinition         string
-		setFakeInternalDefinition string
-		name                      string
-		decl                      string
-		hasResultNames            bool
-		isEllipsis                bool
-		imports                   map[string]domain.ImportSpec
+		params                      []domain.Var
+		results                     []domain.Var
+		Field                       *ast.Field
+		FuncType                    *ast.FuncType
+		Decl                        string
+		definition                  string
+		setReturnDefinition         string
+		setReturnInternalDefinition string
+		name                        string
+		decl                        string
+		hasResultNames              bool
+		isEllipsis                  bool
+		imports                     map[string]domain.ImportSpec
 	}
 
 	// Var implements domain.Var .
@@ -92,14 +92,14 @@ func (method Method) Definition() string {
 	return method.definition
 }
 
-// SetFakeDefinition implements domain.Method#SetFakeDefinition .
-func (method Method) SetFakeDefinition() string {
-	return method.setFakeDefinition
+// SetReturnDefinition implements domain.Method#SetReturnDefinition .
+func (method Method) SetReturnDefinition() string {
+	return method.setReturnDefinition
 }
 
-// SetFakeInternalDefinition implements domain.Method#SetFakeInternalDefinition .
-func (method Method) SetFakeInternalDefinition() string {
-	return method.setFakeInternalDefinition
+// SetReturnInternalDefinition implements domain.Method#SetReturnInternalDefinition .
+func (method Method) SetReturnInternalDefinition() string {
+	return method.setReturnInternalDefinition
 }
 
 // Params implements domain.Method#Params .

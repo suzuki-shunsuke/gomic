@@ -14,17 +14,19 @@ import (
 
 func Test_findCfg(t *testing.T) {
 	fsys := test.NewFileSystemMock(t, nil).
-		SetFakeGetwd("/", nil).SetFakeExist(false)
+		SetReturnGetwd("/", nil).
+		SetReturnExist(false)
 	fsys2 := test.NewFileSystemMock(t, nil).
-		SetFakeGetwd("/", nil).SetFakeExist(true)
+		SetReturnGetwd("/", nil).
+		SetReturnExist(true)
 	fsys3 := test.NewFileSystemMock(t, nil).
-		SetFakeGetwd("/foo/bar", nil).
-		SetExist(func(p string) bool {
+		SetReturnGetwd("/foo/bar", nil).
+		SetFuncExist(func(p string) bool {
 			return p == "/foo/.gomic.yml"
 		})
 	fsys4 := test.NewFileSystemMock(t, nil).
-		SetFakeGetwd("/foo/bar", nil).
-		SetExist(func(p string) bool {
+		SetReturnGetwd("/foo/bar", nil).
+		SetFuncExist(func(p string) bool {
 			return p == "/foo/zoo/.gomic.yml"
 		})
 	data := []struct {
@@ -53,9 +55,9 @@ func Test_findCfg(t *testing.T) {
 
 func TestMain(t *testing.T) {
 	fsys := test.NewFileSystemMock(t, gomic.DoNothing).
-		SetFakeGetWriteCloser(test.NewWriteCloserMock(t, gomic.DoNothing), nil)
+		SetReturnGetWriteCloser(test.NewWriteCloserMock(t, gomic.DoNothing), nil)
 	cfgReader := test.NewCfgReaderMock(t, gomic.DoNothing).
-		SetFakeRead(domain.Config{
+		SetReturnRead(domain.Config{
 			Items: []domain.Item{
 				{
 					Src: domain.Src{
@@ -74,7 +76,7 @@ func TestMain(t *testing.T) {
 	assert.Nil(t, Main(fsys, importer, cfgReader, "/tmp/.gomic.yml"))
 	bPkg, err := importer.GetBuildPkgByPkgPath("os", "", 0)
 	assert.Nil(t, err)
-	cfgReader.SetFakeRead(domain.Config{
+	cfgReader.SetReturnRead(domain.Config{
 		Items: []domain.Item{
 			{
 				Src: domain.Src{

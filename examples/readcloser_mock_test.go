@@ -12,7 +12,7 @@ import (
 
 func ExampleReadCloserMock() {
 	mock := examples.NewReadCloserMock(nil, gomic.DoNothing).
-		SetRead(func(p []byte) (int, error) {
+		SetFuncRead(func(p []byte) (int, error) {
 			if p == nil {
 				return 0, fmt.Errorf("")
 			}
@@ -30,13 +30,13 @@ func ExampleReadCloserMock() {
 func TestReadCloserMockClose(t *testing.T) {
 	mock := examples.NewReadCloserMock(t, gomic.DoNothing)
 	assert.Nil(t, mock.Close())
-	mock.SetFakeClose(fmt.Errorf(""))
+	mock.SetReturnClose(fmt.Errorf(""))
 	assert.NotNil(t, mock.Close())
 }
 
 func TestReadCloserMockRead(t *testing.T) {
 	mock := examples.NewReadCloserMock(t, gomic.DoNothing)
-	mock.SetFakeRead(1, nil)
+	mock.SetReturnRead(1, nil)
 	n, err := mock.Read(nil)
 	assert.Equal(t, 1, n)
 	assert.Equal(t, nil, err)

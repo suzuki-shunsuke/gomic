@@ -51,18 +51,18 @@ func getMethodFromFuncType(
 		for i, param := range funcType.Params.List {
 			noNamedParamArr[i] = &ast.Field{Type: param.Type}
 		}
-		setFakeStr, err := toString(&ast.FuncType{Params: &ast.FieldList{List: arr}})
+		setReturnStr, err := toString(&ast.FuncType{Params: &ast.FieldList{List: arr}})
 		if err != nil {
 			return method, nil, err
 		}
-		method.setFakeDefinition = setFakeStr[4:]
+		method.setReturnDefinition = setReturnStr[4:]
 		s, err := toString(&ast.FuncType{
 			Params:  &ast.FieldList{List: noNamedParamArr},
 			Results: &ast.FieldList{List: noNamedResultArr}})
 		if err != nil {
 			return method, nil, err
 		}
-		method.setFakeInternalDefinition = s[4:]
+		method.setReturnInternalDefinition = s[4:]
 	}
 	return method, imports, nil
 }

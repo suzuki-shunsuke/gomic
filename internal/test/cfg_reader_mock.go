@@ -16,19 +16,16 @@ type (
 	CfgReaderMock struct {
 		t                      *testing.T
 		name                   string
-		CallbackNotImplemented gomic.CallbackNotImplemented
-		impl                   CfgReaderMockImpl
-	}
-
-	// CfgReaderMockImpl holds functions which implement interface's methods.
-	CfgReaderMockImpl struct {
-		Read func(p0 string) (test.Config, error)
+		callbackNotImplemented gomic.CallbackNotImplemented
+		impl                   struct {
+			Read func(p0 string) (test.Config, error)
+		}
 	}
 )
 
 // NewCfgReaderMock returns CfgReaderMock .
 func NewCfgReaderMock(t *testing.T, cb gomic.CallbackNotImplemented) *CfgReaderMock {
-	return &CfgReaderMock{t: t, CallbackNotImplemented: cb}
+	return &CfgReaderMock{t: t, callbackNotImplemented: cb}
 }
 
 // Read is a mock method.
@@ -37,22 +34,22 @@ func (mock CfgReaderMock) Read(p0 string) (test.Config, error) {
 	if mock.impl.Read != nil {
 		return mock.impl.Read(p0)
 	}
-	if mock.CallbackNotImplemented != nil {
-		mock.CallbackNotImplemented(mock.t, mock.name, methodName)
+	if mock.callbackNotImplemented != nil {
+		mock.callbackNotImplemented(mock.t, mock.name, methodName)
 	} else {
 		gomic.DefaultCallbackNotImplemented(mock.t, mock.name, methodName)
 	}
 	return mock.fakeZeroRead(p0)
 }
 
-// SetRead sets a method and returns the mock.
-func (mock *CfgReaderMock) SetRead(impl func(p0 string) (test.Config, error)) *CfgReaderMock {
+// SetFuncRead sets a method and returns the mock.
+func (mock *CfgReaderMock) SetFuncRead(impl func(p0 string) (test.Config, error)) *CfgReaderMock {
 	mock.impl.Read = impl
 	return mock
 }
 
-// SetFakeRead sets a fake method.
-func (mock *CfgReaderMock) SetFakeRead(r0 test.Config, r1 error) *CfgReaderMock {
+// SetReturnRead sets a fake method.
+func (mock *CfgReaderMock) SetReturnRead(r0 test.Config, r1 error) *CfgReaderMock {
 	mock.impl.Read = func(string) (test.Config, error) {
 		return r0, r1
 	}

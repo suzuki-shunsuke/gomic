@@ -16,20 +16,17 @@ type (
 	OSMock struct {
 		t                      *testing.T
 		name                   string
-		CallbackNotImplemented gomic.CallbackNotImplemented
-		impl                   OSMockImpl
-	}
-
-	// OSMockImpl holds functions which implement interface's methods.
-	OSMockImpl struct {
-		Getwd func() (string, error)
-		Mkdir func(name string, perm os.FileMode) error
+		callbackNotImplemented gomic.CallbackNotImplemented
+		impl                   struct {
+			Getwd func() (string, error)
+			Mkdir func(name string, perm os.FileMode) error
+		}
 	}
 )
 
 // NewOSMock returns OSMock .
 func NewOSMock(t *testing.T, cb gomic.CallbackNotImplemented) *OSMock {
-	return &OSMock{t: t, CallbackNotImplemented: cb}
+	return &OSMock{t: t, callbackNotImplemented: cb}
 }
 
 // Getwd is a mock method.
@@ -38,22 +35,22 @@ func (mock OSMock) Getwd() (string, error) {
 	if mock.impl.Getwd != nil {
 		return mock.impl.Getwd()
 	}
-	if mock.CallbackNotImplemented != nil {
-		mock.CallbackNotImplemented(mock.t, mock.name, methodName)
+	if mock.callbackNotImplemented != nil {
+		mock.callbackNotImplemented(mock.t, mock.name, methodName)
 	} else {
 		gomic.DefaultCallbackNotImplemented(mock.t, mock.name, methodName)
 	}
 	return mock.fakeZeroGetwd()
 }
 
-// SetGetwd sets a method and returns the mock.
-func (mock *OSMock) SetGetwd(impl func() (string, error)) *OSMock {
+// SetFuncGetwd sets a method and returns the mock.
+func (mock *OSMock) SetFuncGetwd(impl func() (string, error)) *OSMock {
 	mock.impl.Getwd = impl
 	return mock
 }
 
-// SetFakeGetwd sets a fake method.
-func (mock *OSMock) SetFakeGetwd(r0 string, r1 error) *OSMock {
+// SetReturnGetwd sets a fake method.
+func (mock *OSMock) SetReturnGetwd(r0 string, r1 error) *OSMock {
 	mock.impl.Getwd = func() (string, error) {
 		return r0, r1
 	}
@@ -75,22 +72,22 @@ func (mock OSMock) Mkdir(name string, perm os.FileMode) error {
 	if mock.impl.Mkdir != nil {
 		return mock.impl.Mkdir(name, perm)
 	}
-	if mock.CallbackNotImplemented != nil {
-		mock.CallbackNotImplemented(mock.t, mock.name, methodName)
+	if mock.callbackNotImplemented != nil {
+		mock.callbackNotImplemented(mock.t, mock.name, methodName)
 	} else {
 		gomic.DefaultCallbackNotImplemented(mock.t, mock.name, methodName)
 	}
 	return mock.fakeZeroMkdir(name, perm)
 }
 
-// SetMkdir sets a method and returns the mock.
-func (mock *OSMock) SetMkdir(impl func(name string, perm os.FileMode) error) *OSMock {
+// SetFuncMkdir sets a method and returns the mock.
+func (mock *OSMock) SetFuncMkdir(impl func(name string, perm os.FileMode) error) *OSMock {
 	mock.impl.Mkdir = impl
 	return mock
 }
 
-// SetFakeMkdir sets a fake method.
-func (mock *OSMock) SetFakeMkdir(r0 error) *OSMock {
+// SetReturnMkdir sets a fake method.
+func (mock *OSMock) SetReturnMkdir(r0 error) *OSMock {
 	mock.impl.Mkdir = func(string, os.FileMode) error {
 		return r0
 	}

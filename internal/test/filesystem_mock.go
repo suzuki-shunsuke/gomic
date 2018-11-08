@@ -16,23 +16,20 @@ type (
 	FileSystemMock struct {
 		t                      *testing.T
 		name                   string
-		CallbackNotImplemented gomic.CallbackNotImplemented
-		impl                   FileSystemMockImpl
-	}
-
-	// FileSystemMockImpl holds functions which implement interface's methods.
-	FileSystemMockImpl struct {
-		Exist          func(p0 string) bool
-		MkdirAll       func(p0 string) error
-		Write          func(p0 string, p1 []byte) error
-		GetWriteCloser func(p0 string) (io.WriteCloser, error)
-		Getwd          func() (string, error)
+		callbackNotImplemented gomic.CallbackNotImplemented
+		impl                   struct {
+			Exist          func(p0 string) bool
+			MkdirAll       func(p0 string) error
+			Write          func(p0 string, p1 []byte) error
+			GetWriteCloser func(p0 string) (io.WriteCloser, error)
+			Getwd          func() (string, error)
+		}
 	}
 )
 
 // NewFileSystemMock returns FileSystemMock .
 func NewFileSystemMock(t *testing.T, cb gomic.CallbackNotImplemented) *FileSystemMock {
-	return &FileSystemMock{t: t, CallbackNotImplemented: cb}
+	return &FileSystemMock{t: t, callbackNotImplemented: cb}
 }
 
 // Exist is a mock method.
@@ -41,22 +38,22 @@ func (mock FileSystemMock) Exist(p0 string) bool {
 	if mock.impl.Exist != nil {
 		return mock.impl.Exist(p0)
 	}
-	if mock.CallbackNotImplemented != nil {
-		mock.CallbackNotImplemented(mock.t, mock.name, methodName)
+	if mock.callbackNotImplemented != nil {
+		mock.callbackNotImplemented(mock.t, mock.name, methodName)
 	} else {
 		gomic.DefaultCallbackNotImplemented(mock.t, mock.name, methodName)
 	}
 	return mock.fakeZeroExist(p0)
 }
 
-// SetExist sets a method and returns the mock.
-func (mock *FileSystemMock) SetExist(impl func(p0 string) bool) *FileSystemMock {
+// SetFuncExist sets a method and returns the mock.
+func (mock *FileSystemMock) SetFuncExist(impl func(p0 string) bool) *FileSystemMock {
 	mock.impl.Exist = impl
 	return mock
 }
 
-// SetFakeExist sets a fake method.
-func (mock *FileSystemMock) SetFakeExist(r0 bool) *FileSystemMock {
+// SetReturnExist sets a fake method.
+func (mock *FileSystemMock) SetReturnExist(r0 bool) *FileSystemMock {
 	mock.impl.Exist = func(string) bool {
 		return r0
 	}
@@ -77,22 +74,22 @@ func (mock FileSystemMock) MkdirAll(p0 string) error {
 	if mock.impl.MkdirAll != nil {
 		return mock.impl.MkdirAll(p0)
 	}
-	if mock.CallbackNotImplemented != nil {
-		mock.CallbackNotImplemented(mock.t, mock.name, methodName)
+	if mock.callbackNotImplemented != nil {
+		mock.callbackNotImplemented(mock.t, mock.name, methodName)
 	} else {
 		gomic.DefaultCallbackNotImplemented(mock.t, mock.name, methodName)
 	}
 	return mock.fakeZeroMkdirAll(p0)
 }
 
-// SetMkdirAll sets a method and returns the mock.
-func (mock *FileSystemMock) SetMkdirAll(impl func(p0 string) error) *FileSystemMock {
+// SetFuncMkdirAll sets a method and returns the mock.
+func (mock *FileSystemMock) SetFuncMkdirAll(impl func(p0 string) error) *FileSystemMock {
 	mock.impl.MkdirAll = impl
 	return mock
 }
 
-// SetFakeMkdirAll sets a fake method.
-func (mock *FileSystemMock) SetFakeMkdirAll(r0 error) *FileSystemMock {
+// SetReturnMkdirAll sets a fake method.
+func (mock *FileSystemMock) SetReturnMkdirAll(r0 error) *FileSystemMock {
 	mock.impl.MkdirAll = func(string) error {
 		return r0
 	}
@@ -113,22 +110,22 @@ func (mock FileSystemMock) Write(p0 string, p1 []byte) error {
 	if mock.impl.Write != nil {
 		return mock.impl.Write(p0, p1)
 	}
-	if mock.CallbackNotImplemented != nil {
-		mock.CallbackNotImplemented(mock.t, mock.name, methodName)
+	if mock.callbackNotImplemented != nil {
+		mock.callbackNotImplemented(mock.t, mock.name, methodName)
 	} else {
 		gomic.DefaultCallbackNotImplemented(mock.t, mock.name, methodName)
 	}
 	return mock.fakeZeroWrite(p0, p1)
 }
 
-// SetWrite sets a method and returns the mock.
-func (mock *FileSystemMock) SetWrite(impl func(p0 string, p1 []byte) error) *FileSystemMock {
+// SetFuncWrite sets a method and returns the mock.
+func (mock *FileSystemMock) SetFuncWrite(impl func(p0 string, p1 []byte) error) *FileSystemMock {
 	mock.impl.Write = impl
 	return mock
 }
 
-// SetFakeWrite sets a fake method.
-func (mock *FileSystemMock) SetFakeWrite(r0 error) *FileSystemMock {
+// SetReturnWrite sets a fake method.
+func (mock *FileSystemMock) SetReturnWrite(r0 error) *FileSystemMock {
 	mock.impl.Write = func(string, []byte) error {
 		return r0
 	}
@@ -149,22 +146,22 @@ func (mock FileSystemMock) GetWriteCloser(p0 string) (io.WriteCloser, error) {
 	if mock.impl.GetWriteCloser != nil {
 		return mock.impl.GetWriteCloser(p0)
 	}
-	if mock.CallbackNotImplemented != nil {
-		mock.CallbackNotImplemented(mock.t, mock.name, methodName)
+	if mock.callbackNotImplemented != nil {
+		mock.callbackNotImplemented(mock.t, mock.name, methodName)
 	} else {
 		gomic.DefaultCallbackNotImplemented(mock.t, mock.name, methodName)
 	}
 	return mock.fakeZeroGetWriteCloser(p0)
 }
 
-// SetGetWriteCloser sets a method and returns the mock.
-func (mock *FileSystemMock) SetGetWriteCloser(impl func(p0 string) (io.WriteCloser, error)) *FileSystemMock {
+// SetFuncGetWriteCloser sets a method and returns the mock.
+func (mock *FileSystemMock) SetFuncGetWriteCloser(impl func(p0 string) (io.WriteCloser, error)) *FileSystemMock {
 	mock.impl.GetWriteCloser = impl
 	return mock
 }
 
-// SetFakeGetWriteCloser sets a fake method.
-func (mock *FileSystemMock) SetFakeGetWriteCloser(r0 io.WriteCloser, r1 error) *FileSystemMock {
+// SetReturnGetWriteCloser sets a fake method.
+func (mock *FileSystemMock) SetReturnGetWriteCloser(r0 io.WriteCloser, r1 error) *FileSystemMock {
 	mock.impl.GetWriteCloser = func(string) (io.WriteCloser, error) {
 		return r0, r1
 	}
@@ -186,22 +183,22 @@ func (mock FileSystemMock) Getwd() (string, error) {
 	if mock.impl.Getwd != nil {
 		return mock.impl.Getwd()
 	}
-	if mock.CallbackNotImplemented != nil {
-		mock.CallbackNotImplemented(mock.t, mock.name, methodName)
+	if mock.callbackNotImplemented != nil {
+		mock.callbackNotImplemented(mock.t, mock.name, methodName)
 	} else {
 		gomic.DefaultCallbackNotImplemented(mock.t, mock.name, methodName)
 	}
 	return mock.fakeZeroGetwd()
 }
 
-// SetGetwd sets a method and returns the mock.
-func (mock *FileSystemMock) SetGetwd(impl func() (string, error)) *FileSystemMock {
+// SetFuncGetwd sets a method and returns the mock.
+func (mock *FileSystemMock) SetFuncGetwd(impl func() (string, error)) *FileSystemMock {
 	mock.impl.Getwd = impl
 	return mock
 }
 
-// SetFakeGetwd sets a fake method.
-func (mock *FileSystemMock) SetFakeGetwd(r0 string, r1 error) *FileSystemMock {
+// SetReturnGetwd sets a fake method.
+func (mock *FileSystemMock) SetReturnGetwd(r0 string, r1 error) *FileSystemMock {
 	mock.impl.Getwd = func() (string, error) {
 		return r0, r1
 	}

@@ -17,11 +17,11 @@ func ExampleOSMock() {
 	s, err := mock.Getwd()
 	fmt.Println(s == "" && err == nil)
 	// set return values
-	mock.SetFakeGetwd("foo", nil)
+	mock.SetReturnGetwd("foo", nil)
 	s, err = mock.Getwd()
 	fmt.Println(s == "foo" && err == nil)
 	// implement mock method
-	mock.SetGetwd(func() (string, error) {
+	mock.SetFuncGetwd(func() (string, error) {
 		return "/tmp", fmt.Errorf("")
 	})
 	s, err = mock.Getwd()
@@ -35,10 +35,10 @@ func ExampleOSMock() {
 func TestOSMockMkdir(t *testing.T) {
 	mock := examples.NewOSMock(t, gomic.DoNothing)
 	assert.Nil(t, mock.Mkdir("", 0))
-	mock.SetMkdir(func(name string, perm os.FileMode) error {
+	mock.SetFuncMkdir(func(name string, perm os.FileMode) error {
 		return nil
 	})
 	assert.Nil(t, mock.Mkdir("", 0))
-	mock.SetFakeMkdir(fmt.Errorf(""))
+	mock.SetReturnMkdir(fmt.Errorf(""))
 	assert.NotNil(t, mock.Mkdir("", 0))
 }

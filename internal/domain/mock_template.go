@@ -21,21 +21,18 @@ type (
 	{{.MockName}} struct {
 		t *testing.T
 		name string
-		CallbackNotImplemented gomic.CallbackNotImplemented
-		impl {{.MockName}}Impl
-	}
-
-	// {{.MockName}}Impl holds functions which implement interface's methods.
-	{{.MockName}}Impl struct {
+		callbackNotImplemented gomic.CallbackNotImplemented
+		impl struct {
 {{- range .Methods}}
-		{{.Declaration}}
+				{{.Declaration}}
 {{- end}}
+		}
 	}
 )
 
 // New{{.MockName}} returns {{.MockName}} .
 func New{{.MockName}}(t *testing.T, cb gomic.CallbackNotImplemented) *{{.MockName}} {
-	return &{{.MockName}}{t: t, CallbackNotImplemented: cb}
+	return &{{.MockName}}{t: t, callbackNotImplemented: cb}
 }
 {{$mockName := .MockName -}}
 {{- range .Methods}}
@@ -50,24 +47,24 @@ func (mock {{$mockName}}) {{.Name}}{{.Definition}} {
 		return
 {{- end}}
 	}
-	if mock.CallbackNotImplemented != nil {
-		mock.CallbackNotImplemented(mock.t, mock.name, methodName)
+	if mock.callbackNotImplemented != nil {
+		mock.callbackNotImplemented(mock.t, mock.name, methodName)
 	} else {
 		gomic.DefaultCallbackNotImplemented(mock.t, mock.name, methodName)
 	}
 	{{if .Results}}return mock.fakeZero{{.Name}}({{.ParamsStr}}){{end}}
 }
 
-// Set{{.Name}} sets a method and returns the mock.
-func (mock *{{$mockName}}) Set{{.Name}}(impl func{{.Definition}}) *{{$mockName}} {
+// SetFunc{{.Name}} sets a method and returns the mock.
+func (mock *{{$mockName}}) SetFunc{{.Name}}(impl func{{.Definition}}) *{{$mockName}} {
 	mock.impl.{{.Name}} = impl
 	return mock
 }
 
 {{if .Results}}
-// SetFake{{.Name}} sets a fake method.
-func (mock *{{$mockName}}) SetFake{{.Name}}{{.SetFakeDefinition}} *{{$mockName}} {
-	mock.impl.{{.Name}} = func{{.SetFakeInternalDefinition}} {
+// SetReturn{{.Name}} sets a fake method.
+func (mock *{{$mockName}}) SetReturn{{.Name}}{{.SetReturnDefinition}} *{{$mockName}} {
+	mock.impl.{{.Name}} = func{{.SetReturnInternalDefinition}} {
 		return {{.ResultValuesStr}}
 	}
 	return mock

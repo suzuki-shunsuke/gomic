@@ -15,20 +15,17 @@ type (
 	WriteCloserMock struct {
 		t                      *testing.T
 		name                   string
-		CallbackNotImplemented gomic.CallbackNotImplemented
-		impl                   WriteCloserMockImpl
-	}
-
-	// WriteCloserMockImpl holds functions which implement interface's methods.
-	WriteCloserMockImpl struct {
-		Write func(p []byte) (n int, err error)
-		Close func() error
+		callbackNotImplemented gomic.CallbackNotImplemented
+		impl                   struct {
+			Write func(p []byte) (n int, err error)
+			Close func() error
+		}
 	}
 )
 
 // NewWriteCloserMock returns WriteCloserMock .
 func NewWriteCloserMock(t *testing.T, cb gomic.CallbackNotImplemented) *WriteCloserMock {
-	return &WriteCloserMock{t: t, CallbackNotImplemented: cb}
+	return &WriteCloserMock{t: t, callbackNotImplemented: cb}
 }
 
 // Write is a mock method.
@@ -37,22 +34,22 @@ func (mock WriteCloserMock) Write(p []byte) (n int, err error) {
 	if mock.impl.Write != nil {
 		return mock.impl.Write(p)
 	}
-	if mock.CallbackNotImplemented != nil {
-		mock.CallbackNotImplemented(mock.t, mock.name, methodName)
+	if mock.callbackNotImplemented != nil {
+		mock.callbackNotImplemented(mock.t, mock.name, methodName)
 	} else {
 		gomic.DefaultCallbackNotImplemented(mock.t, mock.name, methodName)
 	}
 	return mock.fakeZeroWrite(p)
 }
 
-// SetWrite sets a method and returns the mock.
-func (mock *WriteCloserMock) SetWrite(impl func(p []byte) (n int, err error)) *WriteCloserMock {
+// SetFuncWrite sets a method and returns the mock.
+func (mock *WriteCloserMock) SetFuncWrite(impl func(p []byte) (n int, err error)) *WriteCloserMock {
 	mock.impl.Write = impl
 	return mock
 }
 
-// SetFakeWrite sets a fake method.
-func (mock *WriteCloserMock) SetFakeWrite(n int, err error) *WriteCloserMock {
+// SetReturnWrite sets a fake method.
+func (mock *WriteCloserMock) SetReturnWrite(n int, err error) *WriteCloserMock {
 	mock.impl.Write = func([]byte) (int, error) {
 		return n, err
 	}
@@ -70,22 +67,22 @@ func (mock WriteCloserMock) Close() error {
 	if mock.impl.Close != nil {
 		return mock.impl.Close()
 	}
-	if mock.CallbackNotImplemented != nil {
-		mock.CallbackNotImplemented(mock.t, mock.name, methodName)
+	if mock.callbackNotImplemented != nil {
+		mock.callbackNotImplemented(mock.t, mock.name, methodName)
 	} else {
 		gomic.DefaultCallbackNotImplemented(mock.t, mock.name, methodName)
 	}
 	return mock.fakeZeroClose()
 }
 
-// SetClose sets a method and returns the mock.
-func (mock *WriteCloserMock) SetClose(impl func() error) *WriteCloserMock {
+// SetFuncClose sets a method and returns the mock.
+func (mock *WriteCloserMock) SetFuncClose(impl func() error) *WriteCloserMock {
 	mock.impl.Close = impl
 	return mock
 }
 
-// SetFakeClose sets a fake method.
-func (mock *WriteCloserMock) SetFakeClose(r0 error) *WriteCloserMock {
+// SetReturnClose sets a fake method.
+func (mock *WriteCloserMock) SetReturnClose(r0 error) *WriteCloserMock {
 	mock.impl.Close = func() error {
 		return r0
 	}
