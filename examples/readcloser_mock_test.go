@@ -2,28 +2,42 @@ package examples_test
 
 import (
 	"fmt"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
 
 	"github.com/suzuki-shunsuke/gomic/examples"
 	"github.com/suzuki-shunsuke/gomic/gomic"
 )
 
 func ExampleReadCloserMock() {
-	mock := examples.NewReadCloserMock(nil, gomic.DoNothing)
-	fmt.Println(mock.Close() == nil)
+	mock := examples.NewReadCloserMock(nil, gomic.DoNothing).
+		SetFuncRead(func(p []byte) (int, error) {
+			if p == nil {
+				return 0, fmt.Errorf("")
+			}
+			return 1, nil
+		})
 	n, err := mock.Read(nil)
-	fmt.Println(n == 0 && err == nil)
-	mock.Impl.Read = func(p []byte) (int, error) {
-		return 10, nil
-	}
-	n, err = mock.Read(nil)
-	fmt.Println(n == 10 && err == nil)
-	mock.Impl.Close = func() error {
-		return fmt.Errorf("failed to close")
-	}
-	fmt.Println(mock.Close() != nil)
+	fmt.Println(n == 0 && err != nil)
+	n, err = mock.Read([]byte{})
+	fmt.Println(n == 1 && err == nil)
 	// Output:
 	// true
 	// true
-	// true
-	// true
+}
+
+func TestReadCloserMockClose(t *testing.T) {
+	mock := examples.NewReadCloserMock(t, gomic.DoNothing)
+	assert.Nil(t, mock.Close())
+	mock.SetReturnClose(fmt.Errorf(""))
+	assert.NotNil(t, mock.Close())
+}
+
+func TestReadCloserMockRead(t *testing.T) {
+	mock := examples.NewReadCloserMock(t, gomic.DoNothing)
+	mock.SetReturnRead(1, nil)
+	n, err := mock.Read(nil)
+	assert.Equal(t, 1, n)
+	assert.Equal(t, nil, err)
 }

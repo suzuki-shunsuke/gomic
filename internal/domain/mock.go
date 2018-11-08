@@ -16,8 +16,8 @@ type (
 		Name() string
 		Declaration() string
 		Definition() string
-		SetFakeDefinition() string
-		SetFakeInternalDefinition() string
+		SetReturnDefinition() string
+		SetReturnInternalDefinition() string
 		ParamsStr() string
 		ResultValuesStr() string
 		HasResultNames() bool
