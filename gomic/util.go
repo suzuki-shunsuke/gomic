@@ -12,11 +12,12 @@ type (
 
 // DefaultCallbackNotImplemented is a default function which is called when the method is not implemented.
 func DefaultCallbackNotImplemented(t *testing.T, intf, method string) {
+	msg := "gomic: mock method %s#%s is not implemented"
 	if t == nil {
-		log.Fatalf("%s#%s is not implemented", intf, method)
+		log.Fatalf(msg, intf, method)
 		return
 	}
-	t.Fatalf("%s#%s is not implemented", intf, method)
+	t.Fatalf(msg, intf, method)
 }
 
 // DoNothing does nothing.
