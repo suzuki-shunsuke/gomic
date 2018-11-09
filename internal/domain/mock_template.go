@@ -32,7 +32,8 @@ type (
 
 // New{{.MockName}} returns {{.MockName}} .
 func New{{.MockName}}(t *testing.T, cb gomic.CallbackNotImplemented) *{{.MockName}} {
-	return &{{.MockName}}{t: t, callbackNotImplemented: cb}
+	return &{{.MockName}}{
+		t: t, name: "{{.MockName}}", callbackNotImplemented: cb}
 }
 {{$mockName := .MockName -}}
 {{- range .Methods}}
