@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"github.com/suzuki-shunsuke/go-cliutil"
 	"github.com/urfave/cli"
 
 	"github.com/suzuki-shunsuke/gomic/internal/infra"
@@ -23,7 +24,7 @@ var GenCommand = cli.Command{
 
 // Gen is the sub command "gen".
 func Gen(c *cli.Context) error {
-	return wrapUsecase(
+	return cliutil.ConvErrToExitError(
 		gencmd.Main(infra.FileSystem{}, infra.Importer{},
 			infra.CfgReader{}, c.String("config")))
 }

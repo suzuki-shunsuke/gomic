@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"github.com/suzuki-shunsuke/go-cliutil"
 	"github.com/urfave/cli"
 
 	"github.com/suzuki-shunsuke/gomic/internal/infra"
@@ -23,5 +24,6 @@ var InitCommand = cli.Command{
 
 // Init is the sub command "init".
 func Init(c *cli.Context) error {
-	return wrapUsecase(initcmd.Main(infra.FileSystem{}, c.String("dest")))
+	return cliutil.ConvErrToExitError(
+		initcmd.Main(infra.FileSystem{}, c.String("dest")))
 }
