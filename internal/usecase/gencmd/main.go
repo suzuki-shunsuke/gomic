@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"path/filepath"
 
+	"github.com/suzuki-shunsuke/go-cliutil"
+
 	"github.com/suzuki-shunsuke/gomic/internal/domain"
 )
 
@@ -13,7 +15,11 @@ func Main(
 	cfgReader domain.CfgReader, cfgPath string,
 ) error {
 	if cfgPath == "" {
-		d, err := findCfg(fsys)
+		wd, err := fsys.Getwd()
+		if err != nil {
+			return err
+		}
+		d, err := cliutil.FindFile(wd, ".gomic.yml", fsys.Exist)
 		if err != nil {
 			return err
 		}
@@ -130,21 +136,4 @@ func renderMock(
 	}
 	defer w.Close()
 	return renderTpl(w, domain.MockTpl, mock)
-}
-
-func findCfg(fsys domain.FileSystem) (string, error) {
-	wd, err := fsys.Getwd()
-	if err != nil {
-		return "", err
-	}
-	for {
-		p := filepath.Join(wd, ".gomic.yml")
-		if fsys.Exist(p) {
-			return p, nil
-		}
-		if wd == "/" || wd == "" {
-			return "", fmt.Errorf(".gomic.yml is not found")
-		}
-		wd = filepath.Dir(wd)
-	}
 }

@@ -34,6 +34,14 @@
   version = "v1.2.2"
 
 [[projects]]
+  digest = "1:f06127e7a8bec1773db2662318b7fbe988b158da748d119b6a70572f81e68ef3"
+  name = "github.com/suzuki-shunsuke/go-cliutil"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "27c6eb3d0965fbd5407bb211bc08733d6f71944d"
+  version = "0.1.0"
+
+[[projects]]
   digest = "1:b24d38b282bacf9791408a080f606370efa3d364e4b5fd9ba0f7b87786d3b679"
   name = "github.com/urfave/cli"
   packages = ["."]
@@ -55,6 +63,7 @@
   input-imports = [
     "github.com/scylladb/go-set/strset",
     "github.com/stretchr/testify/assert",
+    "github.com/suzuki-shunsuke/go-cliutil",
     "github.com/urfave/cli",
     "gopkg.in/yaml.v2",
   ]

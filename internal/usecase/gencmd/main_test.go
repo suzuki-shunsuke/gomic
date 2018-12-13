@@ -1,7 +1,6 @@
 package gencmd
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -11,47 +10,6 @@ import (
 	"github.com/suzuki-shunsuke/gomic/internal/infra"
 	"github.com/suzuki-shunsuke/gomic/internal/test"
 )
-
-func Test_findCfg(t *testing.T) {
-	fsys := test.NewFileSystemMock(t, nil).
-		SetReturnGetwd("/", nil).
-		SetReturnExist(false)
-	fsys2 := test.NewFileSystemMock(t, nil).
-		SetReturnGetwd("/", nil).
-		SetReturnExist(true)
-	fsys3 := test.NewFileSystemMock(t, nil).
-		SetReturnGetwd("/foo/bar", nil).
-		SetFuncExist(func(p string) bool {
-			return p == "/foo/.gomic.yml"
-		})
-	fsys4 := test.NewFileSystemMock(t, nil).
-		SetReturnGetwd("/foo/bar", nil).
-		SetFuncExist(func(p string) bool {
-			return p == "/foo/zoo/.gomic.yml"
-		})
-	data := []struct {
-		testcase string
-		fsys     domain.FileSystem
-		cfgPath  string
-		success  bool
-	}{
-		{"", fsys, "", false},
-		{"", fsys2, "/.gomic.yml", true},
-		{"", fsys3, "/foo/.gomic.yml", true},
-		{"", fsys4, "", false},
-	}
-	for _, tt := range data {
-		t.Run(fmt.Sprintf("%s %s %t", tt.testcase, tt.cfgPath, tt.success), func(t *testing.T) {
-			p, err := findCfg(tt.fsys)
-			if tt.success {
-				assert.Nil(t, err)
-				assert.Equal(t, tt.cfgPath, p)
-			} else {
-				assert.NotNil(t, err)
-			}
-		})
-	}
-}
 
 func TestMain(t *testing.T) {
 	fsys := test.NewFileSystemMock(t, gomic.DoNothing).
