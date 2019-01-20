@@ -8,11 +8,10 @@ import (
 	"github.com/suzuki-shunsuke/gomic/internal/usecase/gencmd"
 )
 
-// GenCommand is the sub command "gen".
-var GenCommand = cli.Command{
+var genCommand = cli.Command{
 	Name:   "gen",
 	Usage:  "generate mocks",
-	Action: Gen,
+	Action: genAction,
 	Flags: []cli.Flag{
 		cli.StringFlag{
 			Name:  "config, c",
@@ -22,8 +21,7 @@ var GenCommand = cli.Command{
 	},
 }
 
-// Gen is the sub command "gen".
-func Gen(c *cli.Context) error {
+func genAction(c *cli.Context) error {
 	return cliutil.ConvErrToExitError(
 		gencmd.Main(infra.FileSystem{}, infra.Importer{},
 			infra.CfgReader{}, c.String("config")))

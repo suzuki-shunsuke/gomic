@@ -8,11 +8,10 @@ import (
 	"github.com/suzuki-shunsuke/gomic/internal/usecase/initcmd"
 )
 
-// InitCommand is the sub command "init".
-var InitCommand = cli.Command{
+var initCommand = cli.Command{
 	Name:   "init",
 	Usage:  "create a configuration file if it doesn't exist",
-	Action: Init,
+	Action: initAction,
 	Flags: []cli.Flag{
 		cli.StringFlag{
 			Name:  "dest, d",
@@ -22,8 +21,7 @@ var InitCommand = cli.Command{
 	},
 }
 
-// Init is the sub command "init".
-func Init(c *cli.Context) error {
+func initAction(c *cli.Context) error {
 	return cliutil.ConvErrToExitError(
 		initcmd.Main(infra.FileSystem{}, c.String("dest")))
 }
