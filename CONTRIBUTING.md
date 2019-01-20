@@ -22,8 +22,7 @@ Please see [package.json](https://github.com/suzuki-shunsuke/gomic/blob/master/p
 ## Set up
 
 ```
-$ npm i
-$ dep ensure
+$ npm run setup
 ```
 
 ## Lint
