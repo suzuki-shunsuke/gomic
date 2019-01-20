@@ -17,8 +17,8 @@ func Gomic() {
 	app.Usage = "generate golang's mock for test"
 
 	app.Commands = []cli.Command{
-		InitCommand,
-		GenCommand,
+		initCommand,
+		genCommand,
 	}
 	app.Run(os.Args)
 }
