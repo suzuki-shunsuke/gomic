@@ -3,7 +3,7 @@ package gencmd
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/suzuki-shunsuke/gomic/internal/domain"
 	"github.com/suzuki-shunsuke/gomic/internal/infra"
@@ -23,5 +23,5 @@ func Test_parsePkg(t *testing.T) {
 		},
 	}
 	_, err := parsePkg(importer, item)
-	assert.Nil(t, err)
+	require.Nil(t, err)
 }

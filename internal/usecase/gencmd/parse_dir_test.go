@@ -3,7 +3,7 @@ package gencmd
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/suzuki-shunsuke/gomic/internal/domain"
 	"github.com/suzuki-shunsuke/gomic/internal/infra"
@@ -12,7 +12,7 @@ import (
 func Test_parseDir(t *testing.T) {
 	importer := infra.Importer{}
 	bPkg, err := importer.GetBuildPkgByPkgPath("os", "", 0)
-	assert.Nil(t, err)
+	require.Nil(t, err)
 	item := domain.Item{
 		Src: domain.Src{
 			Dir:       bPkg.Dir,
@@ -25,5 +25,5 @@ func Test_parseDir(t *testing.T) {
 		},
 	}
 	_, err = parseDir(importer, item, item.Src.Dir)
-	assert.Nil(t, err)
+	require.Nil(t, err)
 }

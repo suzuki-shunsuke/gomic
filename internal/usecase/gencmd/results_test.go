@@ -6,7 +6,7 @@ import (
 	"go/token"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/suzuki-shunsuke/gomic/internal/domain"
 )
@@ -25,9 +25,9 @@ type Foo interface {
 `
 	fset := token.NewFileSet()
 	file, err := parser.ParseFile(fset, "", src, 0)
-	assert.Nil(t, err)
+	require.Nil(t, err)
 	intf, err := getInterfaceInFile(file, "Foo")
-	assert.Nil(t, err)
+	require.Nil(t, err)
 	srcPkg := importSpec{
 		name: "rterror", path: "github.com/suzuki-shunsuke/rterror"}
 	rslts := intf.Methods.List[0].Type.(*ast.FuncType).Results
@@ -37,8 +37,8 @@ type Foo interface {
 	imports := NewImportSpecs()
 	results, specs, hasResultNames, err := getResults(
 		rslts, srcPkg, false, fileImports, imports)
-	assert.Nil(t, err)
-	assert.False(t, hasResultNames)
-	assert.Equal(t, 1, len(results))
-	assert.Equal(t, 1, len(specs.Names()))
+	require.Nil(t, err)
+	require.False(t, hasResultNames)
+	require.Equal(t, 1, len(results))
+	require.Equal(t, 1, len(specs.Names()))
 }

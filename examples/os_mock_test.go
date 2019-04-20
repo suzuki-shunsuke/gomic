@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/suzuki-shunsuke/gomic/examples"
 	"github.com/suzuki-shunsuke/gomic/gomic"
@@ -34,11 +34,11 @@ func ExampleOSMock() {
 
 func TestOSMockMkdir(t *testing.T) {
 	mock := examples.NewOSMock(t, gomic.DoNothing)
-	assert.Nil(t, mock.Mkdir("", 0))
+	require.Nil(t, mock.Mkdir("", 0))
 	mock.SetFuncMkdir(func(name string, perm os.FileMode) error {
 		return nil
 	})
-	assert.Nil(t, mock.Mkdir("", 0))
+	require.Nil(t, mock.Mkdir("", 0))
 	mock.SetReturnMkdir(fmt.Errorf(""))
-	assert.NotNil(t, mock.Mkdir("", 0))
+	require.NotNil(t, mock.Mkdir("", 0))
 }

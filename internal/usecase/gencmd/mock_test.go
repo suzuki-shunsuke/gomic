@@ -5,7 +5,7 @@ import (
 	"go/token"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/suzuki-shunsuke/gomic/internal/domain"
 	"github.com/suzuki-shunsuke/gomic/internal/infra"
@@ -21,9 +21,9 @@ type Foo interface {
 `
 	fset := token.NewFileSet()
 	file, err := parser.ParseFile(fset, "", src, 0)
-	assert.Nil(t, err)
+	require.Nil(t, err)
 	intf, err := getInterfaceInFile(file, "Foo")
-	assert.Nil(t, err)
+	require.Nil(t, err)
 	item := domain.Item{
 		Src: domain.Src{
 			Name: "FooMock",
@@ -36,6 +36,6 @@ type Foo interface {
 	importer := infra.Importer{}
 	srcPkg := importSpec{name: "rterror", path: "github.com/suzuki-shunsuke/rterror"}
 	mock, err := getMockFromInterface(intf, nil, file, item, importer, srcPkg, false)
-	assert.Nil(t, err)
-	assert.Equal(t, "FooMock", mock.MockName())
+	require.Nil(t, err)
+	require.Equal(t, "FooMock", mock.MockName())
 }

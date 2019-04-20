@@ -5,7 +5,7 @@ import (
 	"go/token"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/suzuki-shunsuke/gomic/internal/domain"
 	"github.com/suzuki-shunsuke/gomic/internal/infra"
@@ -20,12 +20,12 @@ import (
 )`
 	fset := token.NewFileSet()
 	file, err := parser.ParseFile(fset, "", src, 0)
-	assert.Nil(t, err)
+	require.Nil(t, err)
 	importer := infra.Importer{}
 	imports, err := getImportsInFile(importer, "", file)
-	assert.Nil(t, err)
+	require.Nil(t, err)
 	spec := importSpec{name: "os", path: "os", str: `"os"`}
-	assert.Equal(t, map[string]domain.ImportSpec{"os": spec}, imports)
+	require.Equal(t, map[string]domain.ImportSpec{"os": spec}, imports)
 }
 
 func Test_getNestedImports(t *testing.T) {
@@ -38,5 +38,5 @@ func Test_getNestedImports(t *testing.T) {
 	exp := [][]string{
 		{`io "io"`, `os "os"`},
 		{`rterror "github.com/suzuki-shunsuke/rterror"`}}
-	assert.Equal(t, exp, arr)
+	require.Equal(t, exp, arr)
 }
