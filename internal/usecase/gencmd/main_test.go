@@ -3,7 +3,7 @@ package gencmd
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/suzuki-shunsuke/gomic/gomic"
 	"github.com/suzuki-shunsuke/gomic/internal/domain"
@@ -31,9 +31,9 @@ func TestMain(t *testing.T) {
 			},
 		}, nil)
 	importer := infra.Importer{}
-	assert.Nil(t, Main(fsys, importer, cfgReader, "/tmp/.gomic.yml"))
+	require.Nil(t, Main(fsys, importer, cfgReader, "/tmp/.gomic.yml"))
 	bPkg, err := importer.GetBuildPkgByPkgPath("os", "", 0)
-	assert.Nil(t, err)
+	require.Nil(t, err)
 	cfgReader.SetReturnRead(domain.Config{
 		Items: []domain.Item{
 			{
@@ -49,7 +49,7 @@ func TestMain(t *testing.T) {
 			},
 		},
 	}, nil)
-	assert.Nil(t, Main(fsys, importer, cfgReader, "/tmp/.gomic.yml"))
+	require.Nil(t, Main(fsys, importer, cfgReader, "/tmp/.gomic.yml"))
 }
 
 func Test_initCfg(t *testing.T) {
@@ -74,6 +74,6 @@ func Test_initCfg(t *testing.T) {
 		},
 	}
 	c, err := initCfg(cfg, "/tmp/.gomic.yml")
-	assert.Nil(t, err)
-	assert.Equal(t, "PrefixFileInfoSuffix", c.Items[0].Src.Name)
+	require.Nil(t, err)
+	require.Equal(t, "PrefixFileInfoSuffix", c.Items[0].Src.Name)
 }

@@ -4,7 +4,7 @@ import (
 	"go/parser"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func Test_toString(t *testing.T) {
@@ -14,12 +14,12 @@ func Test_toString(t *testing.T) {
 		t.Fatal(err)
 	}
 	s, err := toString(arr)
-	assert.Nil(t, err)
-	assert.Equal(t, a, s)
+	require.Nil(t, err)
+	require.Equal(t, a, s)
 }
 
 func Test_isPublicIdent(t *testing.T) {
-	assert.False(t, isPublicIdent(""))
-	assert.False(t, isPublicIdent("foo"))
-	assert.True(t, isPublicIdent("Foo"))
+	require.False(t, isPublicIdent(""))
+	require.False(t, isPublicIdent("foo"))
+	require.True(t, isPublicIdent("Foo"))
 }

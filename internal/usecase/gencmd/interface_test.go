@@ -5,7 +5,7 @@ import (
 	"go/token"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func Test_getInterfaceInFile(t *testing.T) {
@@ -18,9 +18,9 @@ type Foo interface {
 `
 	fset := token.NewFileSet()
 	file, err := parser.ParseFile(fset, "", src, 0)
-	assert.Nil(t, err)
+	require.Nil(t, err)
 	intf, err := getInterfaceInFile(file, "Foo")
-	assert.Nil(t, err)
-	assert.Equal(t, 1, len(intf.Methods.List))
-	assert.Equal(t, "Hello", intf.Methods.List[0].Names[0].Name)
+	require.Nil(t, err)
+	require.Equal(t, 1, len(intf.Methods.List))
+	require.Equal(t, "Hello", intf.Methods.List[0].Names[0].Name)
 }

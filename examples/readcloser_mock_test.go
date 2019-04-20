@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/suzuki-shunsuke/gomic/examples"
 	"github.com/suzuki-shunsuke/gomic/gomic"
@@ -29,15 +29,15 @@ func ExampleReadCloserMock() {
 
 func TestReadCloserMockClose(t *testing.T) {
 	mock := examples.NewReadCloserMock(t, gomic.DoNothing)
-	assert.Nil(t, mock.Close())
+	require.Nil(t, mock.Close())
 	mock.SetReturnClose(fmt.Errorf(""))
-	assert.NotNil(t, mock.Close())
+	require.NotNil(t, mock.Close())
 }
 
 func TestReadCloserMockRead(t *testing.T) {
 	mock := examples.NewReadCloserMock(t, gomic.DoNothing)
 	mock.SetReturnRead(1, nil)
 	n, err := mock.Read(nil)
-	assert.Equal(t, 1, n)
-	assert.Equal(t, nil, err)
+	require.Equal(t, 1, n)
+	require.Equal(t, nil, err)
 }
