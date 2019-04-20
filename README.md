@@ -1,7 +1,7 @@
 # gomic
 
 [![GoDoc](http://img.shields.io/badge/go-documentation-blue.svg?style=flat-square)](http://godoc.org/github.com/suzuki-shunsuke/gomic)
-[![CircleCI](https://circleci.com/gh/suzuki-shunsuke/gomic.svg?style=svg)](https://circleci.com/gh/suzuki-shunsuke/gomic)
+[![Build Status](https://cloud.drone.io/api/badges/suzuki-shunsuke/gomic/status.svg)](https://cloud.drone.io/suzuki-shunsuke/gomic)
 [![codecov](https://codecov.io/gh/suzuki-shunsuke/gomic/branch/master/graph/badge.svg)](https://codecov.io/gh/suzuki-shunsuke/gomic)
 [![Go Report Card](https://goreportcard.com/badge/github.com/suzuki-shunsuke/gomic)](https://goreportcard.com/report/github.com/suzuki-shunsuke/gomic)
 [![GitHub last commit](https://img.shields.io/github/last-commit/suzuki-shunsuke/gomic.svg)](https://github.com/suzuki-shunsuke/gomic)
