@@ -7,9 +7,10 @@
     "lint": "golangci-lint run",
     "c": "bash scripts/coverage.sh",
     "tag": "bash scripts/tag.sh",
+    "durl": "bash scripts/durl.sh",
     "gen-example": "go run cmd/gomic/main.go gen -c examples/gomic.yml && npm run fmt",
     "gen-mock": "go run cmd/gomic/main.go gen && npm run fmt",
-    "ci-local": "circleci build -e LOCAL=true"
+    "ci-local": "time drone exec --pipeline build --env-file scripts/drone-local-env --event pull_request"
   },
   "husky": {
     "hooks": {

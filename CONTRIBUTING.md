@@ -12,9 +12,9 @@
 * [npm](https://www.npmjs.com/)
 * [Golang](https://golang.org/)
 * [dep](https://golang.github.io/dep/)
-* [gometalinter](https://github.com/alecthomas/gometalinter)
+* [golangci-lint](https://github.com/golangci/golangci-lint)
 * [goreleaser](https://goreleaser.com/)
-* [Circle CI CLI](https://github.com/CircleCI-Public/circleci-cli)
+* [Drone CLI](https://github.com/drone/drone-cli)
 
 We use node libraries and npm scripts for development.
 Please see [package.json](https://github.com/suzuki-shunsuke/gomic/blob/master/package.json) .
@@ -30,7 +30,7 @@ $ npm run setup
 ```
 # Lint with go vet.
 $ npm run vet
-# Lint with gometalinter. It takes some time.
+# Lint with golangci-lint. It takes some time.
 $ npm run lint
 ```
 
@@ -44,8 +44,7 @@ $ npm run fmt
 
 ```
 $ npm t
-# Test with circle ci
-# https://circleci.com/docs/2.0/local-cli/
+# Test with Drone
 $ npm run ci-local
 ```
 
@@ -81,6 +80,6 @@ When we push a tag to GitHub, ci is run and gomic is built and uploaded to [GitH
 
 ## CI
 
-We use [Circle CI](https://circleci.com/gh/suzuki-shunsuke/gomic).
+We use [Drone](https://cloud.drone.io/suzuki-shunsuke/gomic).
 
-Please see [.circleci/config.yml](https://github.com/suzuki-shunsuke/gomic/blob/master/.circleci/config.yml) .
+Please see [.drone.yml](https://github.com/suzuki-shunsuke/gomic/blob/master/.drone.yml) .
