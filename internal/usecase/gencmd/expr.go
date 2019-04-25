@@ -62,9 +62,7 @@ func getImportsInExpr(
 		if err != nil {
 			return nil, nil, err
 		}
-		if pkgName != s.Name() {
-			x.Name = s.Name()
-		}
+		x.Name = s.Name()
 	case *ast.SliceExpr:
 		val.X, imports, err = getImportsInExpr(val.X, fileImports, imports, srcPkg, isSamePkg)
 	case *ast.StarExpr:
