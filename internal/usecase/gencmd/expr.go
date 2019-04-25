@@ -12,60 +12,45 @@ func getImportsInExpr(
 	imports domain.ImportSpecs, srcPkg domain.ImportSpec, isSamePkg bool,
 ) (ast.Expr, domain.ImportSpecs, error) {
 	var err error
-	if arr, ok := expr.(*ast.ArrayType); ok {
-		arr.Elt, imports, err = getImportsInExpr(arr.Elt, fileImports, imports, srcPkg, isSamePkg)
-		return expr, imports, err
-	}
-	if _, ok := expr.(*ast.BasicLit); ok {
+	switch val := expr.(type) {
+	case *ast.ArrayType:
+		val.Elt, imports, err = getImportsInExpr(val.Elt, fileImports, imports, srcPkg, isSamePkg)
+	case *ast.BasicLit:
 		return nil, nil, fmt.Errorf("ast.BasicLit is invalid type")
-	}
-	if ch, ok := expr.(*ast.ChanType); ok {
-		ch.Value, imports, err = getImportsInExpr(ch.Value, fileImports, imports, srcPkg, isSamePkg)
-		return expr, imports, err
-	}
-	if e, ok := expr.(*ast.Ellipsis); ok {
-		e.Elt, imports, err = getImportsInExpr(e.Elt, fileImports, imports, srcPkg, isSamePkg)
-		return expr, imports, err
-	}
-	// if _, ok := expr.(*ast.FuncLit); ok {
-	// 	fmt.Println("funcLit")
-	// }
-	if f, ok := expr.(*ast.FuncType); ok {
-		for _, field := range f.Params.List {
+	case *ast.ChanType:
+		val.Value, imports, err = getImportsInExpr(val.Value, fileImports, imports, srcPkg, isSamePkg)
+	case *ast.Ellipsis:
+		val.Elt, imports, err = getImportsInExpr(val.Elt, fileImports, imports, srcPkg, isSamePkg)
+	case *ast.FuncType:
+		for _, field := range val.Params.List {
 			field.Type, imports, err = getImportsInExpr(field.Type, fileImports, imports, srcPkg, isSamePkg)
 			if err != nil {
 				return nil, nil, err
 			}
 		}
-		for _, field := range f.Results.List {
+		for _, field := range val.Results.List {
 			field.Type, imports, err = getImportsInExpr(field.Type, fileImports, imports, srcPkg, isSamePkg)
 			if err != nil {
 				return nil, nil, err
 			}
 		}
-		return expr, imports, nil
-	}
-	if ident, ok := expr.(*ast.Ident); ok {
-		if !isSamePkg && isPublicIdent(ident.Name) {
+	case *ast.Ident:
+		if !isSamePkg && isPublicIdent(val.Name) {
 			if _, err := imports.Add(srcPkg); err != nil {
 				return nil, nil, err
 			}
-			return &ast.SelectorExpr{X: &ast.Ident{Name: srcPkg.Name()}, Sel: ident}, imports, nil
+			return &ast.SelectorExpr{X: &ast.Ident{Name: srcPkg.Name()}, Sel: val}, imports, nil
 		}
-		return expr, imports, nil
-	}
-	if f, ok := expr.(*ast.MapType); ok {
-		f.Key, imports, err = getImportsInExpr(
-			f.Key, fileImports, imports, srcPkg, isSamePkg)
+	case *ast.MapType:
+		val.Key, imports, err = getImportsInExpr(
+			val.Key, fileImports, imports, srcPkg, isSamePkg)
 		if err != nil {
 			return nil, nil, err
 		}
-		f.Value, imports, err = getImportsInExpr(
-			f.Value, fileImports, imports, srcPkg, isSamePkg)
-		return f, imports, err
-	}
-	if se, ok := expr.(*ast.SelectorExpr); ok {
-		x := se.X.(*ast.Ident)
+		val.Value, imports, err = getImportsInExpr(
+			val.Value, fileImports, imports, srcPkg, isSamePkg)
+	case *ast.SelectorExpr:
+		x := val.X.(*ast.Ident)
 		pkgName := x.Name
 		spec, ok := fileImports[pkgName]
 		if !ok {
@@ -78,33 +63,27 @@ func getImportsInExpr(
 		if pkgName != s.Name() {
 			x.Name = s.Name()
 		}
-		return expr, imports, nil
-	}
-	if slice, ok := expr.(*ast.SliceExpr); ok {
-		slice.X, imports, err = getImportsInExpr(slice.X, fileImports, imports, srcPkg, isSamePkg)
-		return expr, imports, err
-	}
-	if star, ok := expr.(*ast.StarExpr); ok {
-		star.X, imports, err = getImportsInExpr(star.X, fileImports, imports, srcPkg, isSamePkg)
-		return expr, imports, err
-	}
-	if st, ok := expr.(*ast.StructType); ok {
-		for _, field := range st.Fields.List {
+	case *ast.SliceExpr:
+		val.X, imports, err = getImportsInExpr(val.X, fileImports, imports, srcPkg, isSamePkg)
+	case *ast.StarExpr:
+		val.X, imports, err = getImportsInExpr(val.X, fileImports, imports, srcPkg, isSamePkg)
+	case *ast.StructType:
+		for _, field := range val.Fields.List {
 			field.Type, imports, err = getImportsInExpr(field.Type, fileImports, imports, srcPkg, isSamePkg)
 			if err != nil {
 				return nil, nil, err
 			}
 		}
-		return expr, imports, nil
-	}
-	if intf, ok := expr.(*ast.InterfaceType); ok {
-		for _, field := range intf.Methods.List {
+	case *ast.InterfaceType:
+		for _, field := range val.Methods.List {
 			field.Type, imports, err = getImportsInExpr(field.Type, fileImports, imports, srcPkg, isSamePkg)
 			if err != nil {
 				return nil, nil, err
 			}
 		}
-		return expr, imports, nil
+	default:
+		// ex. *ast.FuncLit
+		return nil, nil, fmt.Errorf("unsupported type")
 	}
-	return nil, nil, fmt.Errorf("unsupported type")
+	return expr, imports, err
 }
