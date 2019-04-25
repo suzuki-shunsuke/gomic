@@ -34,8 +34,9 @@ type Foo interface {
 		"os": importSpec{name: "os", path: "os"},
 	}
 	imports := NewImportSpecs()
+	idents := newIdents()
 	params, specs, isEllipsis, err := getParams(
-		prms, srcPkg, false, fileImports, imports)
+		prms, srcPkg, false, fileImports, imports, idents)
 	require.Nil(t, err)
 	require.False(t, isEllipsis)
 	require.Equal(t, 1, len(params))

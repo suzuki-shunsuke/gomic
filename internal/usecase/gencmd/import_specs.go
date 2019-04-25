@@ -43,6 +43,19 @@ func (specs *ImportSpecs) Add(spec domain.ImportSpec) (domain.ImportSpec, error)
 		}
 		return nil, fmt.Errorf("failed to add import %s %s", spec.Name(), spec.Path())
 	}
+	if spec.Name() == "mock" {
+		for i := 0; i < 100; i++ {
+			name := fmt.Sprintf("mock%d", i)
+			if _, ok := specs.names[name]; ok {
+				continue
+			}
+			s := importSpec{name: name, path: spec.Path()}
+			specs.names[name] = s
+			specs.paths[s.Path()] = s
+			return s, nil
+		}
+		return nil, fmt.Errorf("failed to add import %s %s", spec.Name(), spec.Path())
+	}
 	specs.names[spec.Name()] = spec
 	specs.paths[spec.Path()] = spec
 	return spec, nil
