@@ -3,7 +3,7 @@ kind: pipeline
 name: commitlint
 steps:
 - name: npm install
-  image: &node_image node:10.15.2-alpine
+  image: &node_image node:10.15.3-alpine
   commands:
   - npm i
 - name: tag/commitlint
@@ -54,8 +54,15 @@ steps:
   environment:
     CODECOV_TOKEN:
       from_secret: codecov_token
+- name: fetch tags
+  image: plugins/git
+  commands:
+  - git fetch --tags
+  when:
+    event:
+    - tag
 - name: release
-  image: &goreleaser goreleaser/goreleaser:v0.105.0
+  image: &goreleaser goreleaser/goreleaser:v0.106.0
   commands:
   - goreleaser release
   environment:
