@@ -20,7 +20,6 @@ type (
 		SetReturnInternalDefinition() string
 		ParamsStr() string
 		ResultValuesStr() string
-		HasResultNames() bool
 		Imports() map[string]ImportSpec
 		Results() []Var
 		IsEllipsis() bool

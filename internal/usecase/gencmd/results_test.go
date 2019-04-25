@@ -36,10 +36,9 @@ type Foo interface {
 	}
 	imports := NewImportSpecs()
 	idents := newIdents()
-	results, specs, hasResultNames, err := getResults(
+	results, specs, err := getResults(
 		rslts, srcPkg, false, fileImports, imports, idents)
 	require.Nil(t, err)
-	require.True(t, hasResultNames)
 	require.Equal(t, 1, len(results))
 	require.Equal(t, 1, len(specs.Names()))
 }

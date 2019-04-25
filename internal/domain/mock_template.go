@@ -73,13 +73,6 @@ func (mock *{{$mockName}}) SetReturn{{.Name}}{{.SetReturnDefinition}} *{{$mockNa
 
 // fakeZero{{.Name}} is a fake method which returns zero values.
 func (mock {{$mockName}}) fakeZero{{.Name}}{{.Definition}} {
-  {{- if not .HasResultNames}}
-	var (
-{{- range .Results}}
-		{{.Name}} {{.Type}}
-{{- end}}
-	)
-	{{- end}}
 	return {{.ResultValuesStr}}
 }
 {{end}}

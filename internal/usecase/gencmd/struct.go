@@ -29,7 +29,6 @@ type (
 		setReturnInternalDefinition string
 		name                        string
 		decl                        string
-		hasResultNames              bool
 		isEllipsis                  bool
 		imports                     map[string]domain.ImportSpec
 	}
@@ -145,11 +144,6 @@ func (method Method) ResultValuesStr() string {
 		arr[i] = name
 	}
 	return strings.Join(arr, ", ")
-}
-
-// HasResultNames implements domain.Method#HasResultNames .
-func (method Method) HasResultNames() bool {
-	return method.hasResultNames
 }
 
 // IsEllipsis implements domain.Method#IsEllipsis .
