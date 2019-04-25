@@ -35,10 +35,11 @@ type Foo interface {
 		"os": importSpec{name: "os", path: "os"},
 	}
 	imports := NewImportSpecs()
+	idents := newIdents()
 	results, specs, hasResultNames, err := getResults(
-		rslts, srcPkg, false, fileImports, imports)
+		rslts, srcPkg, false, fileImports, imports, idents)
 	require.Nil(t, err)
-	require.False(t, hasResultNames)
+	require.True(t, hasResultNames)
 	require.Equal(t, 1, len(results))
 	require.Equal(t, 1, len(specs.Names()))
 }

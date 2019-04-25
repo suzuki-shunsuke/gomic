@@ -1,7 +1,6 @@
 package gencmd
 
 import (
-	"fmt"
 	"go/ast"
 
 	"github.com/suzuki-shunsuke/gomic/internal/domain"
@@ -10,12 +9,12 @@ import (
 func getResults(
 	results *ast.FieldList, srcPkg domain.ImportSpec, isSamePkg bool,
 	fileImports map[string]domain.ImportSpec, imports domain.ImportSpecs,
+	idents *Idents,
 ) ([]domain.Var, domain.ImportSpecs, bool, error) {
 	if results == nil || results.NumFields() == 0 {
 		return []domain.Var{}, imports, false, nil
 	}
 	vars := make([]domain.Var, results.NumFields())
-	hasResultNames := false
 	var err error
 	i := 0
 	for _, p := range results.List {
@@ -28,20 +27,23 @@ func getResults(
 			return nil, nil, false, err
 		}
 		if len(p.Names) == 0 {
-			vars[i] = Var{name: fmt.Sprintf("r%d", i), t: t}
+			name := idents.AddNoName("r")
+			vars[i] = Var{name: name, t: t}
+			p.Names = []*ast.Ident{ast.NewIdent(name)}
 			i++
 			continue
 		}
 		for _, ident := range p.Names {
 			name := ident.Name
 			if name == "" {
-				name = fmt.Sprintf("r%d", i)
+				name = idents.AddNoName("r")
 			} else {
-				hasResultNames = true
+				name = idents.Add(ident.Name)
 			}
+			ident.Name = name
 			vars[i] = Var{name: name, t: t}
 			i++
 		}
 	}
-	return vars, imports, hasResultNames, nil
+	return vars, imports, true, nil
 }

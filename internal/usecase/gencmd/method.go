@@ -14,9 +14,13 @@ func getMethodFromFuncType(
 ) (Method, domain.ImportSpecs, error) {
 	// srcPkg is a package which the interface is defined
 	method := Method{name: getNameFromField(field)}
+	idents := newIdents()
+	for name := range imports.Names() {
+		idents.Add(name)
+	}
 
 	params, imports, isEllipsis, err := getParams(
-		funcType.Params, srcPkg, isSamePkg, fileImports, imports)
+		funcType.Params, srcPkg, isSamePkg, fileImports, imports, idents)
 	if err != nil {
 		return method, nil, err
 	}
@@ -24,7 +28,7 @@ func getMethodFromFuncType(
 	method.isEllipsis = isEllipsis
 
 	results, imports, hasResultNames, err := getResults(
-		funcType.Results, srcPkg, isSamePkg, fileImports, imports)
+		funcType.Results, srcPkg, isSamePkg, fileImports, imports, idents)
 	if err != nil {
 		return method, nil, err
 	}

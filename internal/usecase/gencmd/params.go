@@ -4,12 +4,46 @@ import (
 	"fmt"
 	"go/ast"
 
+	"github.com/scylladb/go-set/strset"
+
 	"github.com/suzuki-shunsuke/gomic/internal/domain"
 )
+
+type (
+	Idents struct {
+		idents *strset.Set
+	}
+)
+
+func newIdents() *Idents {
+	return &Idents{
+		idents: strset.New("mock"),
+	}
+}
+
+func (idents *Idents) AddNoName(ident string) string {
+	for i := 0; i < 100; i++ {
+		s := fmt.Sprintf("%s%d", ident, i)
+		if !idents.idents.Has(s) {
+			idents.idents.Add(s)
+			return s
+		}
+	}
+	return ""
+}
+
+func (idents *Idents) Add(ident string) string {
+	if !idents.idents.Has(ident) {
+		idents.idents.Add(ident)
+		return ident
+	}
+	return idents.AddNoName(ident)
+}
 
 func getParams(
 	prms *ast.FieldList, srcPkg domain.ImportSpec, isSamePkg bool,
 	fileImports map[string]domain.ImportSpec, imports domain.ImportSpecs,
+	idents *Idents,
 ) ([]domain.Var, domain.ImportSpecs, bool, error) {
 	// srcPkg is a package which the interface is defined
 	if prms == nil || prms.NumFields() == 0 {
@@ -23,7 +57,7 @@ func getParams(
 			return nil, nil, false, err
 		}
 		if len(p.Names) == 0 {
-			name := fmt.Sprintf("p%d", i)
+			name := idents.AddNoName("p")
 			params[i] = Var{name: name}
 			p.Names = []*ast.Ident{ast.NewIdent(name)}
 			i++
@@ -31,7 +65,9 @@ func getParams(
 		}
 		for _, ident := range p.Names {
 			if ident.Name == "" {
-				ident.Name = fmt.Sprintf("p%d", i)
+				ident.Name = idents.AddNoName("p")
+			} else {
+				ident.Name = idents.Add(ident.Name)
 			}
 			params[i] = Var{name: ident.Name}
 			i++
