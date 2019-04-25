@@ -37,10 +37,11 @@ func getImportsInExpr(
 		}
 	case *ast.Ident:
 		if !isSamePkg && isPublicIdent(val.Name) {
-			if _, err := imports.Add(srcPkg); err != nil {
+			s, err := imports.Add(srcPkg)
+			if err != nil {
 				return nil, nil, err
 			}
-			return &ast.SelectorExpr{X: &ast.Ident{Name: srcPkg.Name()}, Sel: val}, imports, nil
+			return &ast.SelectorExpr{X: &ast.Ident{Name: s.Name()}, Sel: val}, imports, nil
 		}
 	case *ast.MapType:
 		val.Key, imports, err = getImportsInExpr(
