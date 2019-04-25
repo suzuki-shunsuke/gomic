@@ -1,4 +1,4 @@
 package domain
 
 // Version is the gomic's version.
-const Version = "0.5.2"
+const Version = "0.5.3"
