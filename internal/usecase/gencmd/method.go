@@ -27,12 +27,11 @@ func getMethodFromFuncType(
 	method.params = params
 	method.isEllipsis = isEllipsis
 
-	results, imports, hasResultNames, err := getResults(
+	results, imports, err := getResults(
 		funcType.Results, srcPkg, isSamePkg, fileImports, imports, idents)
 	if err != nil {
 		return method, nil, err
 	}
-	method.hasResultNames = hasResultNames
 	method.results = results
 
 	s, err := toString(field.Type)
