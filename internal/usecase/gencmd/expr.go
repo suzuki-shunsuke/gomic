@@ -11,6 +11,7 @@ func getImportsInExpr(
 	expr ast.Expr, fileImports map[string]domain.ImportSpec,
 	imports domain.ImportSpecs, srcPkg domain.ImportSpec, isSamePkg bool,
 ) (ast.Expr, domain.ImportSpecs, error) {
+	// srcPkg is a package which the interface is defined
 	var err error
 	switch val := expr.(type) {
 	case *ast.ArrayType:
@@ -36,10 +37,11 @@ func getImportsInExpr(
 		}
 	case *ast.Ident:
 		if !isSamePkg && isPublicIdent(val.Name) {
-			if _, err := imports.Add(srcPkg); err != nil {
+			s, err := imports.Add(srcPkg)
+			if err != nil {
 				return nil, nil, err
 			}
-			return &ast.SelectorExpr{X: &ast.Ident{Name: srcPkg.Name()}, Sel: val}, imports, nil
+			return &ast.SelectorExpr{X: &ast.Ident{Name: s.Name()}, Sel: val}, imports, nil
 		}
 	case *ast.MapType:
 		val.Key, imports, err = getImportsInExpr(
@@ -60,9 +62,7 @@ func getImportsInExpr(
 		if err != nil {
 			return nil, nil, err
 		}
-		if pkgName != s.Name() {
-			x.Name = s.Name()
-		}
+		x.Name = s.Name()
 	case *ast.SliceExpr:
 		val.X, imports, err = getImportsInExpr(val.X, fileImports, imports, srcPkg, isSamePkg)
 	case *ast.StarExpr:
