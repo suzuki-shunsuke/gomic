@@ -12,6 +12,7 @@ func getMethodFromFuncType(
 	isSamePkg bool,
 	fileImports map[string]domain.ImportSpec, imports domain.ImportSpecs,
 ) (Method, domain.ImportSpecs, error) {
+	// srcPkg is a package which the interface is defined
 	method := Method{name: getNameFromField(field)}
 
 	params, imports, isEllipsis, err := getParams(

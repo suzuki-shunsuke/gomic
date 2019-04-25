@@ -11,6 +11,7 @@ func getImportsInExpr(
 	expr ast.Expr, fileImports map[string]domain.ImportSpec,
 	imports domain.ImportSpecs, srcPkg domain.ImportSpec, isSamePkg bool,
 ) (ast.Expr, domain.ImportSpecs, error) {
+	// srcPkg is a package which the interface is defined
 	var err error
 	switch val := expr.(type) {
 	case *ast.ArrayType:

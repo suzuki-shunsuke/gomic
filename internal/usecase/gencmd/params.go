@@ -11,6 +11,7 @@ func getParams(
 	prms *ast.FieldList, srcPkg domain.ImportSpec, isSamePkg bool,
 	fileImports map[string]domain.ImportSpec, imports domain.ImportSpecs,
 ) ([]domain.Var, domain.ImportSpecs, bool, error) {
+	// srcPkg is a package which the interface is defined
 	if prms == nil || prms.NumFields() == 0 {
 		return []domain.Var{}, imports, false, nil
 	}

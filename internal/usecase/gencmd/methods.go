@@ -13,6 +13,7 @@ func getMethodsFromInterface(
 	imports domain.ImportSpecs, item domain.Item,
 	importer domain.Importer, srcPkg domain.ImportSpec, isSamePkg bool,
 ) ([]domain.Method, domain.ImportSpecs, error) {
+	// srcPkg is a package which the interface is defined
 	methods := []domain.Method{}
 	if imports == nil {
 		imports = NewImportSpecs()
@@ -40,6 +41,7 @@ func getMethodsInField(
 	fileImports map[string]domain.ImportSpec, imports domain.ImportSpecs,
 	srcPkg domain.ImportSpec, isSamePkg bool,
 ) ([]domain.Method, domain.ImportSpecs, error) {
+	// srcPkg is a package which the interface is defined
 	if funcType, ok := field.Type.(*ast.FuncType); ok {
 		method, imports, err := getMethodFromFuncType(
 			srcPkg, field, funcType, isSamePkg, fileImports, imports)
