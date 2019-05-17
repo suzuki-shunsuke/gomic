@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "test": "go test ./... -v -covermode=atomic",
+    "test": "go test ./... -covermode=atomic",
     "setup": "npm i && dep ensure",
     "fmt": "bash scripts/fmt.sh",
     "vet": "go vet ./...",
