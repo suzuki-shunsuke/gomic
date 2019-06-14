@@ -11,7 +11,6 @@
 
 * [npm](https://www.npmjs.com/)
 * [Golang](https://golang.org/)
-* [dep](https://golang.github.io/dep/)
 * [golangci-lint](https://github.com/golangci/golangci-lint)
 * [goreleaser](https://goreleaser.com/)
 * [Drone CLI](https://github.com/drone/drone-cli)
