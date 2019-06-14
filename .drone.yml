@@ -3,7 +3,7 @@ kind: pipeline
 name: commitlint
 steps:
 - name: npm install
-  image: &node_image node:10.15.3-alpine
+  image: &node_image node:10.16.0-alpine
   commands:
   - npm i
 - name: tag/commitlint
@@ -41,11 +41,11 @@ steps:
   commands:
   - dep-dl
 - name: golangci-lint
-  image: golangci/golangci-lint:v1.16.0
+  image: golangci/golangci-lint:v1.17.1
   commands:
   - golangci-lint run
 - name: codecov
-  image: &image_go golang:1.12.5
+  image: &image_go golang:1.12.6
   commands:
   # bash and cgo seem to be required
   - bash scripts/codecov-test.sh
@@ -62,7 +62,7 @@ steps:
     event:
     - tag
 - name: release
-  image: &goreleaser goreleaser/goreleaser:v0.106.0
+  image: &goreleaser goreleaser/goreleaser:v0.110.0
   commands:
   - goreleaser release
   environment:
