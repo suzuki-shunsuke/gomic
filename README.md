@@ -140,6 +140,47 @@ items:
 * https://github.com/golang/mock
 * https://github.com/gojuno/minimock
 
+## Troble shooting
+
+### go: cannot find GOROOT directory
+
+If you encounter the following error when you run `gomic gen`,
+try to set the environment variable `GOROOT`.
+
+```
+go/build: importGo %s: exit status 2
+go: cannot find GOROOT directory: %s
+```
+
+```console
+$ go version
+go version go1.12.6 darwin/amd64
+$ gomic -v
+gomic version 0.5.6
+$ echo $GOROOT  # GOROOT isn't defined
+
+$ cat .gomic.yml
+---
+items:
+- src:
+    package: io
+    interface: Writer
+  dest:
+    package: mock
+    file: mock/io_writer.go
+$ gomic gen
+go/build: importGo io: exit status 2
+go: cannot find GOROOT directory: /usr/local/go
+```
+
+We don't know the root cause, but we can resolve this issue in this way.
+
+```console
+$ go env GOROOT
+/usr/local/Cellar/go/1.12.6/libexec
+GOROOT=`go env GOROOT` gomic gen
+```
+
 ## Change Log
 
 Please see [Releases](https://github.com/suzuki-shunsuke/gomic/releases).
