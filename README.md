@@ -8,7 +8,7 @@
 [![GitHub tag](https://img.shields.io/github/tag/suzuki-shunsuke/gomic.svg)](https://github.com/suzuki-shunsuke/gomic/releases)
 [![License](http://img.shields.io/badge/license-mit-blue.svg?style=flat-square)](https://raw.githubusercontent.com/suzuki-shunsuke/gomic/master/LICENSE)
 
-cli tool to generate golang's mock for test.
+CLI tool to generate golang's mock for the test.
 
 * [Features](#features)
 * [Install](#install)
@@ -22,17 +22,11 @@ cli tool to generate golang's mock for test.
 ## Features
 
 * Manage mocks with a configuration file, so it is easy to update mocks when interfaces are updated
-* Simple and flexible API. Complicated API and DSL aren't provided. So learning cost is low and test code is easy to read
+* Simple and flexible API. Complicated API and DSL aren't provided. So the learning cost is low and the test code is easy to read
 
 ## Install
 
-gomic is written with Golang and binary is distributed at [release page](https://github.com/suzuki-shunsuke/gomic/releases), so installation is easy and no dependency is needed.
-
-If you want to build yourself, run the following command.
-
-```
-$ go get -u github.com/suzuki-shunsuke/gomic/cmd/gomic
-```
+gomic is written with Golang and binary is distributed at the [release page](https://github.com/suzuki-shunsuke/gomic/releases), so installation is easy and no dependency is needed.
 
 ## Getting Started
 
@@ -53,7 +47,7 @@ type (
 $ gomic init
 ```
 
-3. Edit the configuration file
+3. Edit the configuration file.
 
 ```yaml
 ---
@@ -76,52 +70,52 @@ items:
 
 4. Generate mocks.
 
-```
+```console
 $ gomic gen
 ```
 
-**Note that `gen` command overwrites the existing file without confirmation.**
+**Note that the `gen` command overwrites the existing file without confirmation.**
 
 ## Examples
 
-See [examples](https://github.com/suzuki-shunsuke/gomic/tree/master/examples) .
+See [examples](https://github.com/suzuki-shunsuke/gomic/tree/master/examples).
 
 ## Configuration
 
 ```yaml
 ---
-# file path must be absolute or relative to the configuration file path.
-# default is the default settings of each items. item's settings are preferred than default settings.
+# the file path must be absolute or relative to the configuration file path.
+# `default` is the default settings of each item. item's settings are preferred than default settings.
 default:
 #   vendor_dir: ""
 #   interface_prefix: Mock
 #   interface_suffix: Mock
 items:
 - src:
-    # package or file or dir are required
-    # package is a source package path.
-    # file is a source file path.
-    # dir is a source directory path.
+    # `package` or `file` or `dir` are required
+    # `package` is the source package path.
+    # `file` is the source file path.
+    # `dir` is the source directory path.
     package: github.com/suzuki-shunsuke/gomic/examples
     # file: examples/example.go
     # source interface name. This is required.
     interface: Hello
     # generated mock name
     name: HelloMock
-    # If name is not given, name is "{{interface_prefix}}{{interface}}{{interface_suffix}}".
-    # If name is given, interface_prefix and interface_suffix are ignored.
+    # If `name` is not given, name is "{{interface_prefix}}{{interface}}{{interface_suffix}}".
+    # If `name` is given, `interface_prefix` and `interface_suffix` are ignored.
     # interface_prefix: Mock
     # interface_suffix: Mock
-    # vendor_dir is path of the parent directory of `vendor`.
-    # vendor_dir should be absolute path or relative to configuration file's parent directory.
-    # By default vendor_dir is configuration file's parent directory.
+    # `vendor_dir` is the path of the parent directory of `vendor`.
+    # `vendor_dir` should be absolute path or relative to configuration file's parent directory.
+    # By default `vendor_dir` is the configuration file's parent directory.
     #  vendor_dir: ""
   dest:
     # generated file's package name
-    # If package is not set, gomic tries to get package name with file's parent directory path.
+    # If `package` is not set, gomic tries to get the package name with the file's parent directory path.
     package: example
     # output file path
-    # file is required.
+    # `file` is required.
     # Currently it is not supported to output multiple mocks in the same file.
     # The parent directory must exist.
     file: example/example_mock.go
@@ -130,9 +124,9 @@ items:
 ## Note
 
 * `gen` command overwrites the existing file without confirmation
-* Before run the `gen` command, packages which the interface depends on should be installed at GOPATH or vendor directory. gomic supports vendor directory.
-* Currently it is not supported to output multiple mocks in the same file
-* Generated code is not formatted. So we recommend to format them by `gofmt`.
+* Before running the `gen` command, packages which the interface depends on should be installed at GOPATH or vendor directory. gomic supports vendor directory.
+* Currently, it is not supported to output multiple mocks in the same file
+* The generated code is not formatted. So we recommend to format them by `gofmt`.
 
 ## Other Mocking Libraries
 
@@ -183,11 +177,11 @@ GOROOT=`go env GOROOT` gomic gen
 
 ## Change Log
 
-Please see [Releases](https://github.com/suzuki-shunsuke/gomic/releases).
+Please see the [Releases](https://github.com/suzuki-shunsuke/gomic/releases).
 
 ## Contributing
 
-Please see [CONTRIBUTING.md](CONTRIBUTING.md) .
+Please see the [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 

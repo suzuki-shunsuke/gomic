@@ -2,10 +2,10 @@
 
 ## Check before send a pull request
 
-* Commit message format conforms the [AngularJS Commit Message Format](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#commits)
-* [Commit message type is appropriate](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#type)
+* The commit message format conforms the [AngularJS Commit Message Format](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#commits)
+* [The commit message type is appropriate](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#type)
 * [If the pull request includes breaking changes, please describe them](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#footer)
-* Document and code comment is updated
+* documents and code comments are updated if needed
 
 ## Requirements
 
@@ -16,17 +16,17 @@
 * [Drone CLI](https://github.com/drone/drone-cli)
 
 We use node libraries and npm scripts for development.
-Please see [package.json](https://github.com/suzuki-shunsuke/gomic/blob/master/package.json) .
+Please see the [package.json](https://github.com/suzuki-shunsuke/gomic/blob/master/package.json).
 
 ## Set up
 
-```
+```console
 $ npm run setup
 ```
 
 ## Lint
 
-```
+```console
 # Lint with go vet.
 $ npm run vet
 # Lint with golangci-lint. It takes some time.
@@ -35,13 +35,13 @@ $ npm run lint
 
 ## Format codes with gofmt
 
-```
+```console
 $ npm run fmt
 ```
 
 ## Test
 
-```
+```console
 $ npm t
 # Test with Drone
 $ npm run ci-local
@@ -49,7 +49,7 @@ $ npm run ci-local
 
 ## Generate mocks
 
-```
+```console
 # Generate example mocks.
 $ npm run gen-example
 # Generate mocks for tests of gomic.
@@ -61,13 +61,13 @@ $ npm run gen-mock
 The commit message format of this project conforms to the [AngularJS Commit Message Format](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#commits).
 We validate the commit message with git's `commit-msg` hook using [commitlint](http://marionebl.github.io/commitlint/#/) and [husky](https://www.npmjs.com/package/husky), so you have to install them before commit.
 
-```
+```console
 $ npm i
 ```
 
 ## Release
 
-```
+```console
 $ npm run tag <tag>
 $ git push
 $ git push --tags
@@ -81,4 +81,4 @@ When we push a tag to GitHub, ci is run and gomic is built and uploaded to [GitH
 
 We use [Drone](https://cloud.drone.io/suzuki-shunsuke/gomic).
 
-Please see [.drone.yml](https://github.com/suzuki-shunsuke/gomic/blob/master/.drone.yml) .
+Please see the [.drone.yml](https://github.com/suzuki-shunsuke/gomic/blob/master/.drone.yml).
