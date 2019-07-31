@@ -25,20 +25,24 @@ func Main(
 		}
 		cfgPath = d
 	}
+
 	var err error
 	cfgPath, err = filepath.Abs(cfgPath)
 	if err != nil {
 		return err
 	}
+
 	cfg, err := cfgReader.Read(cfgPath)
 	if err != nil {
 		return err
 	}
+
 	// TODO validation
 	cfg, err = initCfg(cfg, cfgPath)
 	if err != nil {
 		return err
 	}
+
 	cfgDir := filepath.Dir(cfgPath)
 	for _, item := range cfg.Items {
 		if err := genFile(fsys, importer, item, cfgDir); err != nil {

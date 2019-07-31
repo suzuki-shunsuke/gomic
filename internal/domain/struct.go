@@ -1,5 +1,9 @@
 package domain
 
+import (
+	"go/ast"
+)
+
 type (
 	// Config represents configuration.
 	Config struct {
@@ -40,5 +44,22 @@ type (
 	Dest struct {
 		Package string
 		File    string
+	}
+
+	Interface struct {
+		Package   *ast.Package
+		File      *ast.File
+		Interface *ast.InterfaceType
+		Fields    []*ast.Field
+		FuncTypes []*ast.FuncType
+	}
+
+	Interfaces struct {
+		Interfaces []Interface
+	}
+
+	Function struct {
+		FuncType *ast.FuncType
+		Field    *ast.Field
 	}
 )
