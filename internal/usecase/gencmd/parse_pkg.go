@@ -10,17 +10,20 @@ import (
 func parsePkg(
 	importer domain.Importer, item domain.Item,
 ) (domain.MockTemplateArg, error) {
-	bPkg, err := importer.GetBuildPkgByPkgPath(item.Src.Package, item.Src.VendorDir, 0)
+	bPkg, err := importer.GetBuildPkgByPkgPath(item.Src.Package, item.Src.VendorDir)
 	if err != nil {
 		return nil, err
 	}
-	a, err := filepath.Rel(bPkg.Dir, filepath.Dir(item.Dest.File))
+
+	dir := filepath.Dir(bPkg.GoFiles[0])
+
+	a, err := filepath.Rel(dir, filepath.Dir(item.Dest.File))
 	if err != nil {
 		return nil, err
 	}
 	isSamePkg := a == "." && item.Dest.Package == bPkg.Name
 
-	pkgs, err := importer.GetPkgsInDir(bPkg.Dir, nil, 0)
+	pkgs, err := importer.GetPkgsInDir(dir, nil, 0)
 	if err != nil {
 		return nil, err
 	}

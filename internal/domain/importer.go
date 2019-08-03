@@ -2,9 +2,10 @@ package domain
 
 import (
 	"go/ast"
-	"go/build"
 	"go/parser"
 	"os"
+
+	"golang.org/x/tools/go/packages"
 )
 
 type (
@@ -12,7 +13,7 @@ type (
 	Importer interface {
 		GetFileByFilePath(filePath string, mode parser.Mode) (*ast.File, error)
 		GetPkgsInDir(dirPath string, filter func(os.FileInfo) bool, mode parser.Mode) (map[string]*ast.Package, error)
-		GetBuildPkgInDir(dir string, mode build.ImportMode) (*build.Package, error)
-		GetBuildPkgByPkgPath(pkgPath, srcDir string, mode build.ImportMode) (*build.Package, error)
+		GetBuildPkgInDir(dir string) (*packages.Package, error)
+		GetBuildPkgByPkgPath(pkgPath, srcDir string) (*packages.Package, error)
 	}
 )

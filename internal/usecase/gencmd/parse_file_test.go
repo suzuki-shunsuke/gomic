@@ -1,6 +1,7 @@
 package gencmd
 
 import (
+	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -11,9 +12,9 @@ import (
 
 func Test_parseFile(t *testing.T) {
 	importer := infra.Importer{}
-	bPkg, err := importer.GetBuildPkgByPkgPath("os", "", 0)
+	bPkg, err := importer.GetBuildPkgByPkgPath("os", "")
 	require.Nil(t, err)
-	pkgs, err := importer.GetPkgsInDir(bPkg.Dir, nil, 0)
+	pkgs, err := importer.GetPkgsInDir(filepath.Dir(bPkg.GoFiles[0]), nil, 0)
 	require.Nil(t, err)
 	pkg, ok := pkgs[bPkg.Name]
 	require.True(t, ok)

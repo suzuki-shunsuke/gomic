@@ -1,6 +1,7 @@
 package gencmd
 
 import (
+	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -32,13 +33,14 @@ func TestMain(t *testing.T) {
 		}, nil)
 	importer := infra.Importer{}
 	require.Nil(t, Main(fsys, importer, cfgReader, "/tmp/.gomic.yml"))
-	bPkg, err := importer.GetBuildPkgByPkgPath("os", "", 0)
+	bPkg, err := importer.GetBuildPkgByPkgPath("os", "")
 	require.Nil(t, err)
+
 	cfgReader.SetReturnRead(domain.Config{
 		Items: []domain.Item{
 			{
 				Src: domain.Src{
-					Dir:       bPkg.Dir,
+					Dir:       filepath.Dir(bPkg.GoFiles[0]),
 					Interface: "FileInfo",
 					Name:      "FileInfoMock",
 				},

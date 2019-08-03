@@ -97,7 +97,7 @@ func genFile(
 	item domain.Item, cfgDir string,
 ) error {
 	if item.Dest.Package == "" {
-		pkg, err := importer.GetBuildPkgInDir(filepath.Dir(item.Dest.File), 0)
+		pkg, err := importer.GetBuildPkgInDir(filepath.Dir(item.Dest.File))
 		if err != nil {
 			return err
 		}

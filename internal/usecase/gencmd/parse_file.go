@@ -11,7 +11,7 @@ func parseFile(
 	importer domain.Importer, item domain.Item, filePath string,
 ) (domain.MockTemplateArg, error) {
 	// get source pkg name and pkg path
-	pkg, err := importer.GetBuildPkgInDir(filepath.Dir(filePath), 0)
+	pkg, err := importer.GetBuildPkgInDir(filepath.Dir(filePath))
 	if err != nil {
 		return nil, err
 	}
@@ -38,5 +38,5 @@ func parseFile(
 
 	return getMockFromInterface(
 		intf, nil, file, item, importer,
-		importSpec{name: pkg.Name, path: pkg.ImportPath}, isSamePkg)
+		importSpec{name: pkg.Name, path: pkg.PkgPath}, isSamePkg)
 }

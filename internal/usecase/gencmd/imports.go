@@ -24,7 +24,7 @@ func getImportsInFile(
 			v = strings.Trim(spec.Path.Value, "\"")
 		}
 		if k == "" && v != "" {
-			pkg, err := importer.GetBuildPkgByPkgPath(v, vendorDir, 0)
+			pkg, err := importer.GetBuildPkgByPkgPath(v, vendorDir)
 			if err != nil {
 				return nil, err
 			}
