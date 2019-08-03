@@ -2,10 +2,11 @@ package infra
 
 import (
 	"go/ast"
-	"go/build"
 	"go/parser"
 	"go/token"
 	"os"
+
+	"golang.org/x/tools/go/packages"
 )
 
 type (
@@ -27,9 +28,13 @@ func (imp Importer) GetFileByFilePath(
 
 // GetBuildPkgByPkgPath implements domain.Importer#GetBuildPkgByPkgPath .
 func (imp Importer) GetBuildPkgByPkgPath(
-	pkgPath, srcDir string, mode build.ImportMode,
-) (*build.Package, error) {
-	return build.Import(pkgPath, srcDir, mode)
+	pkgPath, srcDir string,
+) (*packages.Package, error) {
+	pkgs, err := packages.Load(nil, pkgPath)
+	if err != nil {
+		return nil, err
+	}
+	return pkgs[0], nil
 }
 
 // pkg path
@@ -43,6 +48,10 @@ func (imp Importer) GetPkgsInDir(
 }
 
 // GetBuildPkgInDir implements domain.Importer#GetBuildPkgInDir .
-func (imp Importer) GetBuildPkgInDir(dir string, mode build.ImportMode) (*build.Package, error) {
-	return build.ImportDir(dir, mode)
+func (imp Importer) GetBuildPkgInDir(dir string) (*packages.Package, error) {
+	pkgs, err := packages.Load(nil, dir)
+	if err != nil {
+		return nil, err
+	}
+	return pkgs[0], nil
 }

@@ -70,11 +70,12 @@ func getMethodsInSelectorExpr(
 	if !ok {
 		return nil, nil, fmt.Errorf("%s is undefined package", pkgName)
 	}
-	bPkg, err := importer.GetBuildPkgByPkgPath(spec.Path(), item.Src.VendorDir, 0)
+	bPkg, err := importer.GetBuildPkgByPkgPath(spec.Path(), item.Src.VendorDir)
 	if err != nil {
 		return nil, nil, err
 	}
-	pkgs, err := importer.GetPkgsInDir(bPkg.Dir, nil, 0)
+	dir := filepath.Dir(bPkg.GoFiles[0])
+	pkgs, err := importer.GetPkgsInDir(dir, nil, 0)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -87,7 +88,7 @@ func getMethodsInSelectorExpr(
 		return nil, nil, err
 	}
 
-	a, err := filepath.Rel(bPkg.Dir, filepath.Dir(item.Dest.File))
+	a, err := filepath.Rel(dir, filepath.Dir(item.Dest.File))
 	if err != nil {
 		return nil, nil, err
 	}

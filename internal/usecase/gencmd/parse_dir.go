@@ -14,7 +14,7 @@ func parseDir(
 	if err != nil {
 		return nil, err
 	}
-	pkg, err := importer.GetBuildPkgInDir(srcDirPath, 0)
+	pkg, err := importer.GetBuildPkgInDir(srcDirPath)
 	if err != nil {
 		return nil, err
 	}
@@ -35,6 +35,6 @@ func parseDir(
 
 	return getMockFromInterface(
 		intf, tPkg, file, item, importer,
-		importSpec{name: item.Dest.Package, path: pkg.ImportPath},
+		importSpec{name: pkg.Name, path: pkg.PkgPath},
 		isSamePkg)
 }

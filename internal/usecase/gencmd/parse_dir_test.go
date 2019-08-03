@@ -1,6 +1,7 @@
 package gencmd
 
 import (
+	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -11,11 +12,11 @@ import (
 
 func Test_parseDir(t *testing.T) {
 	importer := infra.Importer{}
-	bPkg, err := importer.GetBuildPkgByPkgPath("os", "", 0)
+	bPkg, err := importer.GetBuildPkgByPkgPath("os", "")
 	require.Nil(t, err)
 	item := domain.Item{
 		Src: domain.Src{
-			Dir:       bPkg.Dir,
+			Dir:       filepath.Dir(bPkg.GoFiles[0]),
 			Interface: "FileInfo",
 			Name:      "FileInfoMock",
 		},
