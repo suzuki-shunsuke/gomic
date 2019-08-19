@@ -26,25 +26,34 @@ kind: pipeline
 name: durl
 steps:
 - name: durl
-  image: quay.io/suzuki_shunsuke/durl:0.8.0
+  image: quay.io/suzuki_shunsuke/durl:1.0.0
   commands:
   - sh scripts/durl.sh
 ---
 kind: pipeline
 name: build
-workspace:
-  base: /go
-  path: src/github.com/suzuki-shunsuke/gomic
+volumes:
+- name: gopath
+  temp: {}
 steps:
+- name: download go modules
+  image: &image_go golang:1.12.9
+  commands:
+  - go mod download
+  volumes: &volumes
+  - name: gopath
+    path: /go
+  environment:
+    GOPATH: /go
 - name: golangci-lint
   image: golangci/golangci-lint:v1.17.1
   commands:
   - golangci-lint run
   environment:
     GOPATH: /go
-    GO111MODULE: on
+  volumes: *volumes
 - name: codecov
-  image: &image_go golang:1.12.6
+  image: *image_go
   commands:
   # bash and cgo seem to be required
   - bash scripts/codecov-test.sh
@@ -52,9 +61,9 @@ steps:
   - test "$LOCAL" = "true" -o "$DRONE_BUILD_EVENT" = "pull_request" || bash /tmp/codecov.sh
   environment:
     GOPATH: /go
-    GO111MODULE: on
     CODECOV_TOKEN:
       from_secret: codecov_token
+  volumes: *volumes
 - name: fetch tags
   image: plugins/git
   commands:
@@ -65,9 +74,9 @@ steps:
   - goreleaser release
   environment:
     GOPATH: /go
-    GO111MODULE: on
     GITHUB_TOKEN:
       from_secret: github_token
+  volumes: *volumes
   when:
     event:
     - tag
@@ -86,7 +95,7 @@ steps:
   - goreleaser release --skip-publish
   environment:
     GOPATH: /go
-    GO111MODULE: on
+  volumes: *volumes
   when:
     event:
     - pull_request
