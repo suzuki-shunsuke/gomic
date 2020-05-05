@@ -8,5 +8,5 @@ require (
 	github.com/suzuki-shunsuke/go-cliutil v0.0.0-20181211154308-176f852d9bca
 	github.com/urfave/cli v1.20.0
 	golang.org/x/tools v0.0.0-20200505023115-26f46d2f7ef8
-	gopkg.in/yaml.v2 v2.2.2
+	gopkg.in/yaml.v2 v2.2.8
 )
