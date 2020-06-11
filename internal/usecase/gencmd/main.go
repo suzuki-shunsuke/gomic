@@ -19,7 +19,7 @@ func Main(
 		if err != nil {
 			return err
 		}
-		d, err := cliutil.FindFile(wd, ".gomic.yml", fsys.Exist)
+		d, err := cliutil.FindFile(wd, fsys.Exist, ".gomic.yml")
 		if err != nil {
 			return err
 		}
