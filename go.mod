@@ -7,6 +7,6 @@ require (
 	github.com/stretchr/testify v1.6.1
 	github.com/suzuki-shunsuke/go-cliutil v0.3.0
 	github.com/urfave/cli v1.22.4
-	golang.org/x/tools v0.0.0-20200611221159-ecd3fc434862
+	golang.org/x/tools v0.0.0-20200611223150-02f7de68dc9a
 	gopkg.in/yaml.v2 v2.3.0
 )
